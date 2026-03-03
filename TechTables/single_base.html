@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Base</title>
+  <style>
+    :root {
+      --bg: #0f1117; --surface: #161b27; --border: #2a3347; --text: #e8ecf4; --text2: #8b97b5; --accent: #4f8ef7;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
+    .head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    h1 { margin: 0; font-size: 20px; }
+    .sub { color: var(--text2); font-size: 13px; }
+    .card { background: var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:12px; }
+    .card h2 { margin:0; padding:12px 14px; border-bottom:1px solid var(--border); font-size:15px; }
+    .content { padding: 12px; }
+    .back { color: var(--accent); text-decoration:none; font-size:13px; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; font-size:12px; }
+    th { color:var(--text2); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+    .chip { display:inline-block; margin:3px 6px 3px 0; padding:3px 8px; border:1px solid var(--border); border-radius:999px; font-size:11px; color:var(--text2); }
+    .err { color:#ff9090; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>База Single</h1>
+        <div class="sub">Джерело: <code>single_base.json</code></div>
+      </div>
+      <a class="back" href="./index.html">← До списку таблиць</a>
+    </div>
+
+    <div class="card">
+      <h2>Метадані</h2>
+      <div class="content" id="meta"></div>
+    </div>
+
+    <div class="card">
+      <h2>Правила</h2>
+      <div class="content" id="rules"></div>
+    </div>
+
+    <div class="card">
+      <h2>Сімейства компонентів</h2>
+      <div class="content">
+        <table>
+          <thead><tr><th>Сімейство</th><th>Компоненти</th></tr></thead>
+          <tbody id="families"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Default templates</h2>
+      <div class="content" id="templates"></div>
+    </div>
+
+    <div id="err" class="err"></div>
+  </div>
+
+  <script>
+    async function load() {
+      const meta = document.getElementById('meta');
+      const rules = document.getElementById('rules');
+      const fam = document.getElementById('families');
+      const templates = document.getElementById('templates');
+      const err = document.getElementById('err');
+      try {
+        const res = await fetch('./single_base.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        meta.innerHTML = Object.entries(data.meta || {})
+          .map(([k,v]) => `<div><strong>${k}</strong>: ${String(v)}</div>`).join('');
+
+        const rulesObj = data.rules || {};
+        let rulesHtml = Object.entries(rulesObj)
+          .filter(([k,v]) => !Array.isArray(v))
+          .map(([k,v]) => `<div><strong>${k}</strong>: ${String(v)}</div>`).join('');
+        if (Array.isArray(rulesObj.notes)) {
+          rulesHtml += `<div style="margin-top:8px"><strong>notes:</strong><ul>${rulesObj.notes.map(n => `<li>${n}</li>`).join('')}</ul></div>`;
+        }
+        rules.innerHTML = rulesHtml;
+
+        fam.innerHTML = (data.component_families || []).map(f => `
+          <tr>
+            <td>${f.family}</td>
+            <td>${(f.components || []).map(c => `<span class="chip">${c}</span>`).join('')}</td>
+          </tr>
+        `).join('');
+
+        templates.innerHTML = (data.default_templates || []).map(t => `<span class="chip">${t}</span>`).join('');
+      } catch (e) {
+        err.textContent = `Не вдалося завантажити JSON. Якщо відкрито через file://, запусти локальний сервер. Деталі: ${e.message}`;
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
+

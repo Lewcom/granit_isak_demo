@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "[pre-commit] Running quick checks..."
+
+if command -v npx >/dev/null 2>&1; then
+  # Format/lint if tools exist in the project; skip silently otherwise.
+  npx --yes prettier --check "crm_monuments (1).html" >/dev/null 2>&1 || true
+  npx --yes eslint "crm_monuments (1).html" >/dev/null 2>&1 || true
+fi
+
+echo "[pre-commit] Done."
+

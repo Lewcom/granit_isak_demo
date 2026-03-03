@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Граніт Ісак · CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #161b27;
+    --surface2: #1e2538;
+    --border: #2a3347;
+    --border2: #354060;
+    --accent: #4f8ef7;
+    --accent2: #3d7ae8;
+    --accent-dim: rgba(79,142,247,0.12);
+    --green: #2ecc71;
+    --green-dim: rgba(46,204,113,0.12);
+    --orange: #f39c12;
+    --orange-dim: rgba(243,156,18,0.12);
+    --red: #e74c3c;
+    --red-dim: rgba(231,76,60,0.12);
+    --purple: #9b59b6;
+    --purple-dim: rgba(155,89,182,0.12);
+    --teal: #1abc9c;
+    --teal-dim: rgba(26,188,156,0.12);
+    --text: #e8ecf4;
+    --text2: #8b97b5;
+    --text3: #4a5568;
+    --sidebar-w: 220px;
+    --header-h: 56px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); height:100vh; display:flex; overflow:hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w); height:100vh; background: var(--surface);
+    border-right: 1px solid var(--border); display:flex; flex-direction:column;
+    position:fixed; left:0; top:0; bottom:0; z-index:100;
+  }
+  .sidebar-logo {
+    padding: 18px 20px 16px; border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-icon {
+    width:32px; height:32px; background: var(--accent); border-radius:8px;
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;
+  }
+  .logo-text { font-size:13px; font-weight:700; letter-spacing:0.5px; color:var(--text); line-height:1.2; }
+  .logo-sub { font-size:10px; color:var(--text2); font-weight:400; }
+
+  .sidebar-nav { flex:1; padding:12px 0; overflow-y:auto; }
+  .nav-section { padding: 6px 12px 2px; font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--text3); text-transform:uppercase; margin-top:8px; }
+  .nav-item {
+    display:flex; align-items:center; gap:10px; padding:9px 16px;
+    cursor:pointer; transition: all 0.15s; border-radius:0; position:relative;
+    font-size:13px; color:var(--text2); font-weight:400;
+    margin: 1px 8px; border-radius:6px;
+  }
+  .nav-item:hover { background: var(--surface2); color:var(--text); }
+  .nav-item.active { background: var(--accent-dim); color:var(--accent); font-weight:500; }
+  .nav-item.active::before {
+    content:''; position:absolute; left:-8px; top:50%; transform:translateY(-50%);
+    width:3px; height:18px; background:var(--accent); border-radius:0 2px 2px 0;
+  }
+  .nav-icon { width:18px; text-align:center; font-size:14px; flex-shrink:0; }
+  .nav-badge {
+    margin-left:auto; background:var(--red); color:#fff; font-size:10px;
+    font-weight:700; padding:2px 6px; border-radius:10px; font-family:'IBM Plex Mono';
+  }
+  .nav-badge.green { background:var(--green); }
+  .nav-badge.orange { background:var(--orange); }
+
+  .sidebar-user {
+    padding: 14px 16px; border-top: 1px solid var(--border);
+    display:flex; align-items:center; gap:10px;
+  }
+  .user-avatar {
+    width:30px; height:30px; border-radius:50%; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;
+  }
+  .user-info .user-name { font-size:12px; font-weight:600; }
+  .user-info .user-role { font-size:10px; color:var(--text2); }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); flex:1; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+
+  .topbar {
+    height: var(--header-h); background:var(--surface); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 24px; gap:16px; flex-shrink:0;
+  }
+  .page-title { font-size:15px; font-weight:600; }
+  .breadcrumb { font-size:12px; color:var(--text2); }
+  .topbar-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+  .topbar-btn {
+    padding:7px 14px; background:var(--accent); color:#fff; border:none;
+    border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; transition:0.15s;
+    font-family:'IBM Plex Sans';
+  }
+  .topbar-btn:hover { background:var(--accent2); }
+  .topbar-btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border2); }
+  .topbar-btn.secondary:hover { border-color:var(--accent); color:var(--accent); }
+
+  .content { flex:1; overflow-y:auto; padding:24px; height:0; }
+
+  /* PAGE SYSTEM */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* CARDS & STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .stat-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:18px 20px; position:relative; overflow:hidden;
+  }
+  .stat-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  }
+  .stat-card.blue::before { background:var(--accent); }
+  .stat-card.green::before { background:var(--green); }
+  .stat-card.orange::before { background:var(--orange); }
+  .stat-card.purple::before { background:var(--purple); }
+  .stat-label { font-size:11px; color:var(--text2); font-weight:500; letter-spacing:0.3px; margin-bottom:8px; }
+  .stat-value { font-size:28px; font-weight:700; font-family:'IBM Plex Mono'; line-height:1; }
+  .stat-sub { font-size:11px; color:var(--text2); margin-top:6px; }
+  .stat-icon { position:absolute; right:16px; top:16px; font-size:22px; opacity:0.3; }
+
+  /* TABLE */
+  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .table-header { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+  .table-title { font-size:13px; font-weight:600; }
+  .table-count { font-size:11px; color:var(--text2); background:var(--surface2); padding:2px 8px; border-radius:10px; }
+  .table-actions { margin-left:auto; display:flex; gap:8px; }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { border-bottom:1px solid var(--border); }
+  th { padding:10px 16px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--text3); white-space:nowrap; }
+  td { padding:11px 16px; font-size:12.5px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tbody tr { cursor:pointer; transition:0.12s; }
+  tbody tr:hover td { background: var(--surface2); }
+  .mono { font-family:'IBM Plex Mono'; }
+
+  /* STATUS BADGES */
+  .badge {
+    display:inline-flex; align-items:center; gap:4px; padding:3px 9px;
+    border-radius:20px; font-size:10.5px; font-weight:600; white-space:nowrap;
+  }
+  .badge::before { content:'●'; font-size:7px; }
+  .badge.new { background:var(--surface2); color:var(--text2); border:1px solid var(--border2); }
+  .badge.new::before { color:var(--text3); }
+  .badge.calc { background:var(--orange-dim); color:var(--orange); border:1px solid rgba(243,156,18,0.3); }
+  .badge.calc::before { color:var(--orange); }
+  .badge.advance { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(79,142,247,0.3); }
+  .badge.advance::before { color:var(--accent); }
+  .badge.prod { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(155,89,182,0.3); }
+  .badge.prod::before { color:var(--purple); }
+  .badge.art { background:var(--teal-dim); color:var(--teal); border:1px solid rgba(26,188,156,0.3); }
+  .badge.art::before { color:var(--teal); }
+  .badge.pour { background:var(--orange-dim); color:var(--orange); border:1px solid rgba(243,156,18,0.3); }
+  .badge.pour::before { color:var(--orange); }
+  .badge.planned { background:var(--green-dim); color:var(--green); border:1px solid rgba(46,204,113,0.3); }
+  .badge.planned::before { color:var(--green); }
+  .badge.done { background:rgba(255,255,255,0.06); color:#aaa; border:1px solid var(--border); }
+  .badge.done::before { color:#888; }
+  .badge.warn { background:var(--red-dim); color:var(--red); border:1px solid rgba(231,76,60,0.3); }
+  .badge.warn::before { color:var(--red); }
+
+  /* SEARCH & FILTERS */
+  .filters { display:flex; gap:10px; margin-bottom:16px; align-items:center; flex-wrap:wrap; }
+  .search-box {
+    display:flex; align-items:center; gap:8px; background:var(--surface);
+    border:1px solid var(--border); border-radius:7px; padding:8px 12px; flex:1; max-width:300px;
+  }
+  .search-box input { background:none; border:none; outline:none; color:var(--text); font-size:13px; font-family:'IBM Plex Sans'; width:100%; }
+  .search-box input::placeholder { color:var(--text3); }
+  .filter-btn {
+    padding:8px 14px; background:var(--surface); border:1px solid var(--border);
+    color:var(--text2); border-radius:7px; font-size:12px; cursor:pointer; transition:0.15s;
+    font-family:'IBM Plex Sans';
+  }
+  .filter-btn:hover, .filter-btn.active { border-color:var(--accent); color:var(--accent); background:var(--accent-dim); }
+
+  /* FORM STYLES */
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-grid.three { grid-template-columns:1fr 1fr 1fr; }
+  .form-grid.four { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .form-full { grid-column:1/-1; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-label { font-size:11px; font-weight:600; color:var(--text2); letter-spacing:0.3px; text-transform:uppercase; }
+  .form-label span { color:var(--red); margin-left:2px; }
+  .form-input, .form-select, .form-textarea {
+    background:var(--surface2); border:1px solid var(--border2); color:var(--text);
+    border-radius:7px; padding:9px 12px; font-size:13px; font-family:'IBM Plex Sans';
+    transition:0.15s; outline:none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
+  .form-input.auto { background:rgba(79,142,247,0.06); border-color:rgba(79,142,247,0.2); color:var(--accent); }
+  .form-textarea { resize:vertical; min-height:80px; }
+  .form-select {
+    appearance:none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b97b5' d='M6 8L1 3h10z'/%3E%3C/svg%3E"),
+      linear-gradient(to right, transparent calc(100% - 44px), var(--surface2) calc(100% - 44px));
+    background-repeat:no-repeat,no-repeat;
+    background-position:right 14px center,0 0;
+    background-size:12px 12px,100% 100%;
+    padding-right:44px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .form-hint { font-size:10.5px; color:var(--text3); }
+
+  .section-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    margin-bottom:16px; overflow:hidden;
+  }
+  .section-head {
+    padding:13px 18px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:10px; background:var(--surface2);
+  }
+  .section-head-icon { font-size:15px; }
+  .section-head-title { font-size:13px; font-weight:600; }
+  .section-head-sub { font-size:11px; color:var(--text2); margin-left:auto; }
+  .section-body { padding:18px; }
+
+  /* ORDER DETAILS TABLE */
+  .details-table { width:100%; border-collapse:collapse; }
+  .details-table th { padding:8px 12px; text-align:left; font-size:10px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--text3); border-bottom:1px solid var(--border); }
+  .details-table td { padding:10px 12px; font-size:12.5px; border-bottom:1px solid var(--border); }
+  .details-table tr:last-child td { border-bottom:none; }
+  .details-table select, .details-table input[type=text] {
+    background:var(--surface2); border:1px solid var(--border2); color:var(--text);
+    border-radius:5px; padding:6px 10px; font-size:12px; font-family:'IBM Plex Sans'; outline:none; width:100%;
+  }
+  .details-table select {
+    appearance:none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b97b5' d='M6 8L1 3h10z'/%3E%3C/svg%3E"),
+      linear-gradient(to right, transparent calc(100% - 30px), var(--surface2) calc(100% - 30px));
+    background-repeat:no-repeat,no-repeat;
+    background-position:right 10px center,0 0;
+    background-size:12px 12px,100% 100%;
+    padding-right:30px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .details-table select:focus, .details-table input[type=text]:focus { border-color:var(--accent); }
+  .detail-name { font-weight:600; font-size:12px; }
+  .detail-required { color:var(--red); font-size:10px; margin-left:4px; }
+
+  /* KANBAN / STATUS COLS */
+  .kanban { display:flex; gap:14px; overflow-x:auto; padding-bottom:8px; }
+  .kanban-col { min-width:220px; max-width:220px; }
+  .kanban-col-head {
+    padding:10px 14px; border-radius:8px 8px 0 0; font-size:11px; font-weight:700;
+    letter-spacing:0.5px; text-transform:uppercase; display:flex; align-items:center; gap:8px;
+  }
+  .kanban-col-count { margin-left:auto; background:rgba(255,255,255,0.15); padding:2px 7px; border-radius:10px; font-size:10px; }
+  .kanban-col-body { display:flex; flex-direction:column; gap:8px; padding:10px 0; }
+  .kanban-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:12px 14px; cursor:pointer; transition:0.15s;
+  }
+  .kanban-card:hover { border-color:var(--accent); transform:translateY(-1px); }
+  .kanban-card-num { font-family:'IBM Plex Mono'; font-size:10px; color:var(--text2); margin-bottom:4px; }
+  .kanban-card-name { font-size:12.5px; font-weight:600; margin-bottom:2px; }
+  .kanban-card-city { font-size:11px; color:var(--text2); margin-bottom:8px; }
+  .kanban-card-footer { display:flex; align-items:center; justify-content:space-between; }
+  .kanban-card-price { font-family:'IBM Plex Mono'; font-size:12px; color:var(--green); font-weight:600; }
+  .kanban-card-date { font-size:10px; color:var(--text3); }
+
+  /* CALENDAR / PLANNING */
+  .week-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:16px; }
+  .week-day-head { padding:8px 4px; text-align:center; font-size:10px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px; }
+  .week-day {
+    background:var(--surface); border:1px solid var(--border); border-radius:6px;
+    min-height:80px; padding:6px; position:relative;
+  }
+  .week-day.today { border-color:var(--accent); }
+  .week-day-num { font-size:11px; font-weight:700; margin-bottom:4px; font-family:'IBM Plex Mono'; }
+  .week-day.today .week-day-num { color:var(--accent); }
+  .week-event {
+    background:var(--accent-dim); border-left:2px solid var(--accent); border-radius:3px;
+    padding:3px 5px; font-size:10px; margin-bottom:2px; cursor:pointer; transition:0.1s;
+  }
+  .week-event:hover { background:rgba(79,142,247,0.25); }
+  .week-event.pour { background:var(--orange-dim); border-color:var(--orange); }
+  .week-event.install { background:var(--green-dim); border-color:var(--green); }
+
+  /* STOCK TABLE */
+  .stock-progress { height:4px; background:var(--surface2); border-radius:2px; margin-top:4px; }
+  .stock-bar { height:100%; border-radius:2px; transition:0.3s; }
+  .stock-bar.ok { background:var(--green); }
+  .stock-bar.warn { background:var(--orange); }
+  .stock-bar.critical { background:var(--red); }
+
+  /* ANALYTICS */
+  .chart-area { height:160px; position:relative; display:flex; align-items:flex-end; gap:8px; padding:0 4px; }
+  .chart-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .chart-bar {
+    width:100%; background:var(--accent); border-radius:4px 4px 0 0;
+    transition:0.3s; cursor:pointer; position:relative;
+  }
+  .chart-bar:hover { background:var(--accent2); }
+  .chart-bar-label { font-size:9px; color:var(--text2); }
+  .chart-bar-val { font-size:9px; font-family:'IBM Plex Mono'; color:var(--text2); }
+  .chart-lines { position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none; }
+
+  /* PRINT PLAN */
+  .plan-table-wrap { border:2px solid var(--border); border-radius:8px; overflow:hidden; }
+  .plan-table { width:100%; border-collapse:collapse; }
+  .plan-table th { padding:10px 12px; background:var(--surface2); border-bottom:2px solid var(--border2); font-size:10.5px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--text2); }
+  .plan-table td { padding:10px 12px; border-bottom:1px solid var(--border); font-size:12.5px; }
+  .plan-table tr:last-child td { border-bottom:none; }
+  .plan-check { width:16px; height:16px; accent-color:var(--accent); cursor:pointer; }
+
+  /* MODAL */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200;
+    display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--surface); border:1px solid var(--border2); border-radius:12px;
+    width:90%; max-width:560px; max-height:88vh; overflow-y:auto; padding:24px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+  .modal-title { font-size:16px; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .modal-close { margin-left:auto; background:none; border:none; color:var(--text2); font-size:18px; cursor:pointer; }
+
+  /* NOTIFICATION */
+  .notif {
+    position:fixed; bottom:24px; right:24px; z-index:300;
+    background:var(--surface2); border:1px solid var(--border2); border-radius:10px;
+    padding:14px 18px; font-size:13px; min-width:280px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transform:translateY(80px); opacity:0; transition:0.3s;
+    display:flex; align-items:center; gap:10px;
+  }
+  .notif.show { transform:translateY(0); opacity:1; }
+  .notif-icon { font-size:18px; }
+  .center-alert-overlay {
+    position: fixed; inset: 0; z-index: 450;
+    background: rgba(0,0,0,.62);
+    display: none; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .center-alert-overlay.open { display: flex; }
+  .center-alert {
+    width: 100%; max-width: 420px;
+    background: var(--surface);
+    border: 1px solid rgba(243,156,18,.55);
+    border-radius: 12px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.45);
+    padding: 18px 18px 14px;
+  }
+  .center-alert-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .center-alert-text { color: var(--text2); font-size: 13px; line-height: 1.45; }
+  .center-alert-actions { display:flex; justify-content:flex-end; margin-top:14px; }
+
+  /* DASHBOARD MINI */
+  .dash-row { display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:16px; }
+  .dash-funnel { display:flex; flex-direction:column; gap:6px; }
+  .funnel-row { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--surface2); border-radius:6px; }
+  .funnel-label { font-size:12px; flex:1; }
+  .funnel-count { font-family:'IBM Plex Mono'; font-size:13px; font-weight:700; min-width:30px; text-align:right; }
+  .funnel-bar-wrap { flex:2; height:6px; background:var(--bg); border-radius:3px; }
+  .funnel-bar { height:100%; border-radius:3px; }
+
+  /* SETTINGS */
+  .settings-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); }
+  .settings-row:last-child { border-bottom:none; }
+  .settings-label { font-size:13px; font-weight:500; }
+  .settings-sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .tpl-item-card {
+    display:flex; flex-direction:column; gap:8px;
+    padding:8px 10px;
+    background:var(--bg2);
+    border:1px solid var(--border2);
+    border-radius:7px;
+    margin:0 auto 7px;
+    transition:.15s;
+    max-width:150px;
+    width:100%;
+    min-height:116px;
+  }
+  .tpl-item-card.active { border-color:var(--accent); }
+  .tpl-item-title {
+    font-size:12px; color:var(--accent); font-weight:600;
+    line-height:1.2; white-space:normal; overflow-wrap:anywhere;
+  }
+  .tpl-item-meta { font-size:10px; color:var(--text3); margin-top:2px; }
+  .tpl-item-actions { display:flex; gap:6px; width:100%; }
+  .tpl-icon-btn {
+    width:auto; flex:1; height:30px; border-radius:7px; border:1px solid var(--border2);
+    background:var(--surface2); color:var(--text); cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:13px; transition:.15s; padding:0; position:relative;
+  }
+  .tpl-icon-btn:hover { border-color:var(--accent); color:var(--accent); }
+  .tpl-icon-btn[data-tip]::after {
+    content:attr(data-tip);
+    position:absolute;
+    left:50%;
+    bottom:calc(100% + 6px);
+    transform:translate(-50%, 4px);
+    opacity:0;
+    pointer-events:none;
+    z-index:20;
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:6px;
+    padding:4px 7px;
+    color:var(--text);
+    font-size:10px;
+    white-space:nowrap;
+    box-shadow:0 8px 18px rgba(0,0,0,.35);
+    transition:.14s;
+  }
+  .tpl-icon-btn[data-tip]:hover::after {
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
+  #page-templates .section-card:first-child .section-body {
+    padding:10px;
+  }
+  #tpl-list {
+    padding:0;
+  }
+  .tpl-icon-btn.danger {
+    background:rgba(180,50,50,.3);
+    color:#ff9090;
+    border-color:rgba(220,80,80,.4);
+  }
+  .tpl-icon-btn.danger:hover {
+    background:rgba(200,60,60,.36);
+    border-color:rgba(240,95,95,.55);
+    color:#ffb2b2;
+  }
+  .toggle { position:relative; width:40px; height:22px; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle-slider { position:absolute; inset:0; background:var(--border2); border-radius:11px; cursor:pointer; transition:0.3s; }
+  .toggle-slider::before { content:''; position:absolute; width:16px; height:16px; left:3px; top:3px; background:#fff; border-radius:50%; transition:0.3s; }
+  input:checked + .toggle-slider { background:var(--accent); }
+  input:checked + .toggle-slider::before { transform:translateX(18px); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--text3); }
+
+  .divider { height:1px; background:var(--border); margin:16px 0; }
+  .text-muted { color:var(--text2); font-size:12px; }
+  .text-mono { font-family:'IBM Plex Mono'; }
+  .color-green { color:var(--green); }
+  .color-red { color:var(--red); }
+  .color-orange { color:var(--orange); }
+  .color-accent { color:var(--accent); }
+  .ml-auto { margin-left:auto; }
+  .flex { display:flex; align-items:center; gap:8px; }
+  .gap-4 { gap:4px; }
+  .mt-4 { margin-top:16px; }
+  .mb-4 { margin-bottom:16px; }
+  .fw-bold { font-weight:700; }
+  .fs-sm { font-size:11px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo" style="flex-direction:column; align-items:center; padding:16px 12px 14px; gap:8px;">
+    <img src="data:image/jpeg;base64,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" style="width:80px; height:80px; object-fit:contain; object-position:center; border-radius:6px;" alt="ГРАНІТ ІСАК">
+    <div style="text-align:center;">
+      <div class="logo-sub" style="font-size:9px; color:var(--text3); letter-spacing:1px; text-transform:uppercase;">CRM система</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">Головне</div>
+    <div class="nav-item active" onclick="navigate('dashboard', this)">
+      <span class="nav-icon">📊</span> Дашборд
+    </div>
+    <div class="nav-item" onclick="navigate('orders', this)">
+      <span class="nav-icon">📋</span> Замовлення
+      <span class="nav-badge">54</span>
+    </div>
+    <div class="nav-item" onclick="navigate('new-order', this)">
+      <span class="nav-icon">➕</span> Нове замовлення
+    </div>
+    <div class="nav-item" onclick="navigate('templates', this); renderTemplatesPage();">
+      <span class="nav-icon">📋</span> Шаблони
+    </div>
+    <div class="nav-item" onclick="navigate('clients', this)">
+      <span class="nav-icon">👥</span> Клієнти
+    </div>
+
+    <div class="nav-section">Виробництво</div>
+    <div class="nav-item" onclick="navigate('planning', this)">
+      <span class="nav-icon">📅</span> Планування
+      <span class="nav-badge orange">12</span>
+    </div>
+    <div class="nav-item" onclick="navigate('week-plan', this)">
+      <span class="nav-icon">🗓️</span> План тижня
+    </div>
+    <div class="nav-item" onclick="navigate('stock', this)">
+      <span class="nav-icon">📦</span> Склад
+      <span class="nav-badge">3</span>
+    </div>
+
+    <div class="nav-section">Документи</div>
+    <div class="nav-item" onclick="navigate('documents', this)">
+      <span class="nav-icon">📄</span> Документи
+    </div>
+
+    <div class="nav-section">Адмін</div>
+    <div class="nav-item" onclick="navigate('analytics', this)">
+      <span class="nav-icon">📈</span> Аналітика
+    </div>
+    <div class="nav-item" onclick="navigate('settings', this)">
+      <span class="nav-icon">⚙️</span> Налаштування
+    </div>
+  </nav>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" style="background:linear-gradient(135deg,#b8860b,#daa520);">ОЛ</div>
+    <div class="user-info">
+      <div class="user-name">Олеся</div>
+      <div class="user-role">Менеджер</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="page-title">Дашборд</div>
+      <div class="breadcrumb" id="breadcrumb">Головна</div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn secondary" onclick="showNotif('🔔 Нагадування: 3 заливки цього тижня', 'orange')">🔔 3</button>
+      <button class="topbar-btn" onclick="navigate('new-order', document.querySelector('.nav-item:nth-child(3)'))">+ Нове замовлення</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon">📋</div>
+          <div class="stat-label">Активних замовлень</div>
+          <div class="stat-value color-accent">47</div>
+          <div class="stat-sub">+5 за цей тиждень</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Очікуваний дохід</div>
+          <div class="stat-value color-green">284 500</div>
+          <div class="stat-sub">грн · до кінця місяця</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon">⛏️</div>
+          <div class="stat-label">Заливок цього тижня</div>
+          <div class="stat-value color-orange">12</div>
+          <div class="stat-sub">Наступна: 27 лютого</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Виконано цього місяця</div>
+          <div class="stat-value" style="color:var(--purple)">18</div>
+          <div class="stat-sub">з 35 запланованих</div>
+        </div>
+      </div>
+
+      <div class="dash-row">
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-head-icon">📊</span>
+            <span class="section-head-title">Продажі по місяцях (2026)</span>
+          </div>
+          <div class="section-body">
+            <div class="chart-area">
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:65px" title="Січень: 28"></div><div class="chart-bar-label">Січ</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:90px;background:var(--green)" title="Лютий: 38"></div><div class="chart-bar-label">Лют</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:130px;opacity:0.4" title="Березень: план"></div><div class="chart-bar-label" style="color:var(--text3)">Бер</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:0;opacity:0.2"></div><div class="chart-bar-label" style="color:var(--text3)">Кві</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:0;opacity:0.2"></div><div class="chart-bar-label" style="color:var(--text3)">Тра</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:0;opacity:0.2"></div><div class="chart-bar-label" style="color:var(--text3)">Чер</div></div>
+            </div>
+            <div class="flex mt-4" style="gap:16px; justify-content:center;">
+              <span class="text-muted fs-sm">● Виконано</span>
+              <span style="font-size:11px; color:var(--green);">● Поточний</span>
+              <span class="text-muted fs-sm" style="opacity:0.5;">● Прогноз</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-head">
+            <span class="section-head-icon">🔄</span>
+            <span class="section-head-title">Воронка замовлень</span>
+          </div>
+          <div class="section-body">
+            <div class="dash-funnel">
+              <div class="funnel-row">
+                <div class="funnel-label">Нові</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:30%;background:var(--text3)"></div></div>
+                <div class="funnel-count">8</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Прорахунок</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:20%;background:var(--orange)"></div></div>
+                <div class="funnel-count color-orange">5</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Аванс</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:55%;background:var(--accent)"></div></div>
+                <div class="funnel-count color-accent">14</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Виробництво</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:45%;background:var(--purple)"></div></div>
+                <div class="funnel-count" style="color:var(--purple)">11</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Художниця</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:15%;background:var(--teal)"></div></div>
+                <div class="funnel-count" style="color:var(--teal)">4</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Заливка</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:30%;background:var(--orange)"></div></div>
+                <div class="funnel-count color-orange">8</div>
+              </div>
+              <div class="funnel-row">
+                <div class="funnel-label">Встановлення</div>
+                <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:20%;background:var(--green)"></div></div>
+                <div class="funnel-count color-green">5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-head-icon">⚠️</span>
+          <span class="section-head-title">Потребують уваги</span>
+          <span class="section-head-sub">Сьогодні, 25 лютого 2026</span>
+        </div>
+        <div class="section-body">
+          <table>
+            <thead><tr>
+              <th>#</th><th>Клієнт</th><th>Місто</th><th>Подія</th><th>Дата</th><th>Дія</th>
+            </tr></thead>
+            <tbody>
+              <tr onclick="navigate('new-order', document.querySelectorAll('.nav-item')[2])">
+                <td class="mono color-accent">№79</td>
+                <td>Іванченко О.М.</td><td>Кушниця</td>
+                <td><span class="badge warn">Заливка завтра</span></td>
+                <td class="color-orange mono">26.02</td>
+                <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">Відкрити</button></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent">№74</td>
+                <td>Грицюк В.І.</td><td>Сокирниця</td>
+                <td><span class="badge calc">Аванс не отримано</span></td>
+                <td class="mono">—</td>
+                <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">Відкрити</button></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent">№81</td>
+                <td>Лисенко П.Г.</td><td>Грушево</td>
+                <td><span class="badge art">У художниці 14 днів</span></td>
+                <td class="mono">—</td>
+                <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">Відкрити</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ORDERS ==================== -->
+    <div class="page" id="page-orders">
+      <div class="filters">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" placeholder="Пошук по клієнту, місту, номеру...">
+        </div>
+        <button class="filter-btn active" onclick="filterStatus(this,'all')">Усі</button>
+        <button class="filter-btn" onclick="filterStatus(this,'new')">Нові</button>
+        <button class="filter-btn" onclick="filterStatus(this,'advance')">Аванс</button>
+        <button class="filter-btn" onclick="filterStatus(this,'prod')">Виробництво</button>
+        <button class="filter-btn" onclick="filterStatus(this,'pour')">Заливка</button>
+        <button class="filter-btn" onclick="filterStatus(this,'done')">Виконані</button>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="filter-btn" onclick="toggleView()">⊞ Канбан</button>
+        </div>
+      </div>
+
+      <div id="orders-table-view">
+        <div class="table-wrap">
+          <div class="table-header">
+            <span class="table-title">Всі замовлення</span>
+            <span class="table-count">54 записи</span>
+            <div class="table-actions">
+              <button class="filter-btn" onclick="showNotif('📥 Експорт Excel підготовлено', 'green')">↓ Excel</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr>
+              <th>#</th><th>Клієнт</th><th>Місто / Кладовище</th><th>Деталі</th>
+              <th>Термін</th><th>Вартість</th><th>Аванс</th><th>Статус</th>
+            </tr></thead>
+            <tbody>
+              <tr onclick="openOrderModal()">
+                <td class="mono color-accent fw-bold">№84</td>
+                <td><div>Злинсало А.В.</div><div class="text-muted fs-sm">097 763 4925</div></td>
+                <td>Н. Яниця</td>
+                <td class="text-muted fs-sm">120×220 · Межирічка · Хрест: ні</td>
+                <td><div class="mono">до червня</div></td>
+                <td class="mono color-green fw-bold">1 550 €</td>
+                <td><div class="mono">1 000 ₴</div><div class="text-muted fs-sm">29.09 · карта</div></td>
+                <td><span class="badge advance">Аванс</span></td>
+              </tr>
+              <tr onclick="navigate('new-order', document.querySelectorAll('.nav-item')[2])">
+                <td class="mono color-accent fw-bold">№83</td>
+                <td><div>Кравченко М.П.</div><div class="text-muted fs-sm">050 234 5678</div></td>
+                <td>Кушниця</td>
+                <td class="text-muted fs-sm">140×240 · Вісконт · Хрест: є</td>
+                <td><div class="mono">25.03.2026</div><div class="text-muted fs-sm">Заливка: 15.03</div></td>
+                <td class="mono color-green fw-bold">18 500 ₴</td>
+                <td><div class="mono">5 000 ₴</div><div class="text-muted fs-sm">20.02 · готівка</div></td>
+                <td><span class="badge prod">Виробництво</span></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent fw-bold">№82</td>
+                <td><div>Петренко С.Г.</div><div class="text-muted fs-sm">067 345 6789</div></td>
+                <td>Сокирниця</td>
+                <td class="text-muted fs-sm">120×220 · Чорна · Стела: кувшин</td>
+                <td><div class="mono">до Великодня</div></td>
+                <td class="mono color-green fw-bold">14 200 ₴</td>
+                <td><div class="mono">3 000 ₴</div></td>
+                <td><span class="badge art">Художниця</span></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent fw-bold">№81</td>
+                <td><div>Лисенко П.Г.</div><div class="text-muted fs-sm">063 456 7890</div></td>
+                <td>Грушево</td>
+                <td class="text-muted fs-sm">200×250 · Зелена · Дідкович</td>
+                <td><div class="mono">20.03.2026</div><div class="text-muted fs-sm">Заливка: 10.03</div></td>
+                <td class="mono color-green fw-bold">22 000 ₴</td>
+                <td><div class="mono">7 000 ₴</div></td>
+                <td><span class="badge pour">Заливка</span></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent fw-bold">№80</td>
+                <td><div>Бойко Р.В.</div><div class="text-muted fs-sm">073 567 8901</div></td>
+                <td>Туря Пасіка</td>
+                <td class="text-muted fs-sm">160×260 · Дідкович · Міжирічка</td>
+                <td><div class="mono">квітень</div></td>
+                <td class="mono color-green fw-bold">19 800 ₴</td>
+                <td><div class="mono">—</div></td>
+                <td><span class="badge calc">Прорахунок</span></td>
+              </tr>
+              <tr>
+                <td class="mono color-accent fw-bold">№79</td>
+                <td><div>Іванченко О.М.</div><div class="text-muted fs-sm">066 678 9012</div></td>
+                <td>Кушниця</td>
+                <td class="text-muted fs-sm">140×240 · Чорна · Вісконт</td>
+                <td><div class="mono color-orange">26.02.2026 ⚡</div><div class="text-muted fs-sm">Заливка: завтра!</div></td>
+                <td class="mono color-green fw-bold">16 500 ₴</td>
+                <td><div class="mono">5 000 ₴</div></td>
+                <td><span class="badge planned">Встановлення</span></td>
+              </tr>
+              <tr style="opacity:0.5">
+                <td class="mono fw-bold">№78</td>
+                <td><div>Семенченко В.О.</div></td>
+                <td>Лецовиця</td>
+                <td class="text-muted fs-sm">140×240 · Чорна</td>
+                <td class="mono">10.02.2026</td>
+                <td class="mono fw-bold">12 000 ₴</td>
+                <td><div class="mono">12 000 ₴</div></td>
+                <td><span class="badge done">Виконано ✓</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="orders-kanban-view" style="display:none;" class="mt-4">
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--surface2); color:var(--text2);">Нові <span class="kanban-col-count">3</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card"><div class="kanban-card-num">#87</div><div class="kanban-card-name">Мельник О.В.</div><div class="kanban-card-city">📍 Колочава</div><div class="kanban-card-footer"><span class="kanban-card-price">—</span><span class="kanban-card-date">сьогодні</span></div></div>
+              <div class="kanban-card"><div class="kanban-card-num">#86</div><div class="kanban-card-name">Ткаченко І.С.</div><div class="kanban-card-city">📍 Н.Ворота</div><div class="kanban-card-footer"><span class="kanban-card-price">—</span><span class="kanban-card-date">вчора</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--orange-dim); color:var(--orange);">Прорахунок <span class="kanban-col-count">5</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card"><div class="kanban-card-num">#85</div><div class="kanban-card-name">Бойко Р.В.</div><div class="kanban-card-city">📍 Туря Пасіка</div><div class="kanban-card-footer"><span class="kanban-card-price">~19 800₴</span><span class="kanban-card-date">24.02</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--accent-dim); color:var(--accent);">Аванс <span class="kanban-col-count">14</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card" onclick="openOrderModal()"><div class="kanban-card-num">#84</div><div class="kanban-card-name">Злинсало А.В.</div><div class="kanban-card-city">📍 Н. Яниця</div><div class="kanban-card-footer"><span class="kanban-card-price">1 550€</span><span class="kanban-card-date">черв.</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--purple-dim); color:var(--purple);">Виробництво <span class="kanban-col-count">11</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card"><div class="kanban-card-num">#83</div><div class="kanban-card-name">Кравченко М.П.</div><div class="kanban-card-city">📍 Кушниця</div><div class="kanban-card-footer"><span class="kanban-card-price">18 500₴</span><span class="kanban-card-date">25.03</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--teal-dim); color:var(--teal);">Художниця <span class="kanban-col-count">4</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card"><div class="kanban-card-num">#82</div><div class="kanban-card-name">Петренко С.Г.</div><div class="kanban-card-city">📍 Сокирниця</div><div class="kanban-card-footer"><span class="kanban-card-price">14 200₴</span><span class="kanban-card-date">Великдень</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--orange-dim); color:var(--orange);">Заливка <span class="kanban-col-count">8</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card"><div class="kanban-card-num">#81</div><div class="kanban-card-name">Лисенко П.Г.</div><div class="kanban-card-city">📍 Грушево</div><div class="kanban-card-footer"><span class="kanban-card-price">22 000₴</span><span class="kanban-card-date">10.03</span></div></div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-head" style="background:var(--green-dim); color:var(--green);">Встановлення <span class="kanban-col-count">5</span></div>
+            <div class="kanban-col-body">
+              <div class="kanban-card" style="border-color:var(--orange)"><div class="kanban-card-num">#79 ⚡</div><div class="kanban-card-name">Іванченко О.М.</div><div class="kanban-card-city">📍 Кушниця</div><div class="kanban-card-footer"><span class="kanban-card-price">16 500₴</span><span class="kanban-card-date color-orange fw-bold">26.02!</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== NEW ORDER ==================== -->
+    <div class="page" id="page-new-order">
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-head-icon">📋</span>
+          <span class="section-head-title">Блок 1 — Замовник та строки</span>
+          <span class="section-head-sub">Поля зі * обов'язкові</span>
+        </div>
+        <div class="section-body">
+          <div class="form-grid four">
+            <div class="form-group">
+              <label class="form-label">Номер замовлення</label>
+              <input class="form-input auto" value="№ 85" readonly>
+              <span class="form-hint">Генерується автоматично</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Дата оформлення</label>
+              <input class="form-input auto" value="25.02.2026" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Статус</label>
+              <select class="form-select">
+                <option>Нове замовлення</option>
+                <option selected>Прорахунок</option>
+                <option>Аванс отримано</option>
+                <option>Виробничий лист</option>
+                <option>Передано художниці</option>
+                <option>Заливка фундаменту</option>
+                <option>Заплановано встановлення</option>
+                <option>Встановлено / Оплачено</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Тип виробу</label>
+              <select class="form-select">
+                <option>Пам'ятник стандарт</option>
+                <option>Пам'ятник з аркою</option>
+                <option>Подвійний пам'ятник</option>
+                <option>Хрест</option>
+              </select>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">ПІБ замовника <span>*</span></label>
+              <input class="form-input" placeholder="Прізвище Ім'я Побатькові">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Телефон <span>*</span></label>
+              <input class="form-input" placeholder="0XX XXX XXXX" value="097 763 4925">
+              <span class="form-hint">При кліку → відкриє Viber</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Місто / Кладовище <span>*</span></label>
+              <input class="form-input" placeholder="Наприклад: Кушниця, Гірське кладовище" list="cities">
+              <datalist id="cities"><option value="Кушниця"><option value="Сокирниця"><option value="Грушево"><option value="Туря Пасіка"><option value="Лецовиця"><option value="Кошельово"></datalist>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Джерело звернення</label>
+              <select class="form-select">
+                <option>— оберіть —</option>
+                <option>Рекомендація</option>
+                <option>Instagram</option>
+                <option>Facebook</option>
+                <option>Вивіска / магазин</option>
+                <option>Повторний клієнт</option>
+              </select>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="form-grid three">
+            <div class="form-group">
+              <label class="form-label">Термін виконання <span>*</span></label>
+              <input class="form-input" type="text" placeholder="ДД.ММ.РРРР або 'до Великодня'" oninput="calcPourDate(this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Дата заливки</label>
+              <input class="form-input auto" id="pour-date" value="" placeholder="Авто: Термін − 10 днів">
+              <span class="form-hint">Автоматично або вручну</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Місяць встановлення</label>
+              <select class="form-select">
+                <option>Березень 2026</option>
+                <option>Квітень 2026</option>
+                <option>Травень 2026</option>
+                <option>Червень 2026</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="section-card" id="constructor-card">
+        <div class="section-head">
+          <span class="section-head-icon">🪨</span>
+          <span class="section-head-title">Блок 2 — Конструктор деталей</span>
+          <span class="section-head-sub">Вартість: $<span id="constructor-total">0</span></span>
+        </div>
+        <div class="section-body">
+          <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border2);">
+            <div style="flex:1">
+              <label class="form-label">Базова модель</label>
+              <select class="form-select" id="baseModelSelect" onchange="loadBaseModel()" style="width:100%">
+                <option value="">— оберіть шаблон або заповніть вручну —</option>
+              </select>
+            </div>
+            <button onclick="clearConstructor()" style="padding:8px 14px;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:12px;white-space:nowrap;">✕ Очистити</button>
+          </div>
+          <div id="c-headers"></div>
+          <div id="c-rows"></div>
+          <button onclick="cAddRow()" style="width:100%;margin-top:8px;padding:10px;border:1px dashed var(--border2);background:transparent;color:var(--text3);border-radius:6px;cursor:pointer;font-size:12px;transition:.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">＋ Додати елемент</button>
+          <div id="c-empty" style="text-align:center;padding:24px;color:var(--text3);font-size:12px">Оберіть базову модель або натисніть «＋ Додати елемент»</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-head-icon">🎨</span>
+          <span class="section-head-title">Блок 3 — Художнє оформлення та напис</span>
+        </div>
+        <div class="section-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">ПІБ покійного <span>*</span></label>
+              <input class="form-input" placeholder="Прізвище Ім'я Побатькові">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Дати</label>
+              <div class="flex">
+                <input class="form-input" placeholder="р. ММ.РРРР" style="flex:1">
+                <span style="color:var(--text2);">—</span>
+                <input class="form-input" placeholder="ДД.ММ.РРРР" style="flex:1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Тип портрету</label>
+              <select class="form-select">
+                <option>Лазерне гравіювання</option>
+                <option>Кольоровий</option>
+                <option>Чорно-білий</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Напрямок обличчя</label>
+              <select class="form-select">
+                <option>— оберіть —</option>
+                <option>Ліворуч</option>
+                <option>Праворуч</option>
+                <option>Прямо</option>
+              </select>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Епітафія / Напис</label>
+              <textarea class="form-textarea" placeholder="Текст для гравіювання на стелі..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Завантажити фото</label>
+              <div style="border:2px dashed var(--border2); border-radius:8px; padding:20px; text-align:center; cursor:pointer; color:var(--text2); font-size:12px;" onclick="showNotif('📎 Оберіть файл для завантаження', 'accent')">
+                📷 Клікніть або перетягніть фото<br>
+                <span style="font-size:10px; color:var(--text3)">JPEG, PNG · до 20 МБ</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Примітки для цеху</label>
+              <textarea class="form-textarea" placeholder="Додаткові інструкції для майстрів...">Шорми чорні 15 см.</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head">
+          <span class="section-head-icon">💰</span>
+          <span class="section-head-title">Блок 4 — Фінанси</span>
+        </div>
+        <div class="section-body">
+          <div class="form-grid four">
+            <div class="form-group">
+              <label class="form-label">Загальна вартість <span>*</span></label>
+              <input class="form-input" id="total-price" value="13 990" oninput="calcBalance()">
+              <span class="form-hint">₴ або € (вкажіть валюту)</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Передоплата</label>
+              <input class="form-input" id="advance-price" value="5 000" oninput="calcBalance()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Залишок</label>
+              <input class="form-input auto" id="balance-price" value="8 990" readonly>
+              <span class="form-hint">Авто: Вартість − Аванс</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Спосіб оплати авансу</label>
+              <select class="form-select">
+                <option>Готівка</option>
+                <option>Карта</option>
+                <option>Переказ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex" style="justify-content:flex-end; gap:12px; padding-bottom:16px;">
+        <button class="topbar-btn secondary" onclick="showNotif('💾 Чернетка збережена', 'accent')">Зберегти чернетку</button>
+        <button class="topbar-btn secondary" onclick="navigate('documents', document.querySelectorAll('.nav-item')[9])">📄 Виробничий лист</button>
+        <button class="topbar-btn" onclick="showNotif('✅ Замовлення №85 збережено!', 'green'); navigate(\'orders\', document.querySelectorAll(\'.nav-item\')[1])">✓ Зберегти замовлення</button>
+      </div>
+    </div>
+
+    <!-- ==================== CLIENTS ==================== -->
+    <div class="page" id="page-clients">
+      <div class="filters">
+        <div class="search-box"><span>🔍</span><input type="text" placeholder="Пошук клієнта..."></div>
+        <button class="filter-btn">+ Новий клієнт</button>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><span class="table-title">База клієнтів</span><span class="table-count">68 клієнтів</span></div>
+        <table>
+          <thead><tr><th>ПІБ</th><th>Телефон</th><th>Місто</th><th>Замовлень</th><th>Загальна сума</th><th>Останнє</th></tr></thead>
+          <tbody>
+            <tr onclick="showNotif('👤 Картка клієнта: Злинсало А.В.', 'accent')"><td><div>Злинсало Анна Василівна</div></td><td class="mono">097 763 4925</td><td>Н. Яниця</td><td class="mono text-center">1</td><td class="mono color-green">1 550 €</td><td class="mono">29.09.2025</td></tr>
+            <tr><td>Кравченко Михайло Петрович</td><td class="mono">050 234 5678</td><td>Кушниця</td><td class="mono">2</td><td class="mono color-green">36 200 ₴</td><td class="mono">20.02.2026</td></tr>
+            <tr><td>Іванченко Олексій Миколайович</td><td class="mono">066 678 9012</td><td>Кушниця</td><td class="mono">1</td><td class="mono color-green">16 500 ₴</td><td class="mono">15.01.2026</td></tr>
+            <tr><td>Лисенко Петро Григорович</td><td class="mono">063 456 7890</td><td>Грушево</td><td class="mono">1</td><td class="mono color-green">22 000 ₴</td><td class="mono">10.02.2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== PLANNING ==================== -->
+    <div class="page" id="page-planning">
+      <div class="filters">
+        <button class="filter-btn active">Лютий 2026</button>
+        <button class="filter-btn">Березень 2026</button>
+        <button class="filter-btn">Квітень 2026</button>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="topbar-btn secondary" onclick="navigate('week-plan', document.querySelectorAll('.nav-item')[6])">📋 Сформувати план тижня</button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:4px;">
+        <div class="week-day-head">Пн</div><div class="week-day-head">Вт</div>
+        <div class="week-day-head">Ср</div><div class="week-day-head">Чт</div>
+        <div class="week-day-head">Пт</div><div class="week-day-head">Сб</div>
+        <div class="week-day-head">Нд</div>
+      </div>
+      <div class="week-grid">
+        <div class="week-day"><div class="week-day-num" style="color:var(--text3)">23</div></div>
+        <div class="week-day"><div class="week-day-num" style="color:var(--text3)">24</div></div>
+        <div class="week-day today"><div class="week-day-num">25</div><div class="week-event pour" onclick="showNotif('⛏️ Заливка: Грушево №81', 'orange')">⛏️ Грушево #81</div></div>
+        <div class="week-day"><div class="week-day-num">26</div><div class="week-event pour" onclick="showNotif('⛏️ Заливка: Кушниця №79', 'orange')">⛏️ Кушниця #79</div><div class="week-event pour">⛏️ Сокир. #82</div></div>
+        <div class="week-day"><div class="week-day-num">27</div></div>
+        <div class="week-day"><div class="week-day-num">28</div><div class="week-event install" onclick="showNotif('✅ Встановлення: Лецовиця №78', 'green')">✅ Лецовиця #78</div></div>
+        <div class="week-day"><div class="week-day-num">29</div></div>
+        <div class="week-day"><div class="week-day-num">2</div></div>
+        <div class="week-day"><div class="week-day-num">3</div></div>
+        <div class="week-day"><div class="week-day-num">4</div><div class="week-event pour">⛏️ Туря П. #80</div></div>
+        <div class="week-day"><div class="week-day-num">5</div></div>
+        <div class="week-day"><div class="week-day-num">6</div></div>
+        <div class="week-day"><div class="week-day-num">7</div><div class="week-event install">✅ Кушниця #83</div></div>
+        <div class="week-day"><div class="week-day-num">8</div></div>
+        <div class="week-day"><div class="week-day-num">9</div></div>
+        <div class="week-day"><div class="week-day-num">10</div></div>
+        <div class="week-day"><div class="week-day-num">11</div><div class="week-event pour">⛏️ Грушево #81</div></div>
+        <div class="week-day"><div class="week-day-num">12</div></div>
+        <div class="week-day"><div class="week-day-num">13</div></div>
+        <div class="week-day"><div class="week-day-num">14</div><div class="week-event install">✅ Н.Яниця #84</div></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head"><span class="section-head-icon">📋</span><span class="section-head-title">Всі заливки цього місяця</span><span class="section-head-sub">12 заливок</span></div>
+        <div class="section-body" style="padding:0">
+          <table>
+            <thead><tr><th>#</th><th>Клієнт</th><th>Місто</th><th>Розмір</th><th>Дата заливки</th><th>Дата встановлення</th><th>Залито?</th></tr></thead>
+            <tbody>
+              <tr><td class="mono color-accent">#79</td><td>Іванченко О.М.</td><td>Кушниця</td><td class="mono">140/240</td><td class="mono color-orange">26.02 ⚡</td><td class="mono">08.03</td><td><input type="checkbox" class="plan-check"></td></tr>
+              <tr><td class="mono color-accent">#81</td><td>Лисенко П.Г.</td><td>Грушево</td><td class="mono">200/250</td><td class="mono">25.02</td><td class="mono">07.03</td><td><input type="checkbox" class="plan-check" checked></td></tr>
+              <tr><td class="mono color-accent">#82</td><td>Петренко С.Г.</td><td>Сокирниця</td><td class="mono">120/220</td><td class="mono">26.02</td><td class="mono">10.03</td><td><input type="checkbox" class="plan-check"></td></tr>
+              <tr><td class="mono color-accent">#80</td><td>Бойко Р.В.</td><td>Туря Пасіка</td><td class="mono">160/260</td><td class="mono">04.03</td><td class="mono">14.03</td><td><input type="checkbox" class="plan-check"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== WEEK PLAN ==================== -->
+    <div class="page" id="page-week-plan">
+      <div class="filters">
+        <span style="font-size:13px; font-weight:600;">Тиждень: 25 лютого — 3 березня 2026</span>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="topbar-btn secondary" onclick="selectAllPlan()">☑ Вибрати всі</button>
+          <button class="topbar-btn" onclick="showNotif('🖨️ Друк плану тижня...', 'green')">🖨️ Друкувати план</button>
+        </div>
+      </div>
+
+      <div class="section-card mb-4">
+        <div class="section-head"><span class="section-head-icon">☑</span><span class="section-head-title">Оберіть замовлення для плану тижня</span><span class="section-head-sub">Відмічено: <span id="plan-count">2</span> з 8</span></div>
+        <div class="section-body" style="padding:0">
+          <div class="plan-table-wrap">
+            <table class="plan-table">
+              <thead><tr>
+                <th style="width:40px">☑</th><th>#</th><th>Куди</th>
+                <th>Розмір</th><th>Рамка</th><th>Каблук</th><th>Плитка</th><th>Примітка</th>
+              </tr></thead>
+              <tbody id="plan-tbody">
+                <tr>
+                  <td><input type="checkbox" class="plan-check" checked onchange="updatePlanCount()"></td>
+                  <td class="mono color-accent fw-bold">79</td><td>Кушниця</td>
+                  <td class="mono">140/240</td><td>Чорна</td><td>Чорний</td><td>Вісконт</td>
+                  <td><input type="text" style="border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'IBM Plex Sans';outline:none;width:120px" placeholder="примітка..." value="Фото 40×50"></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="plan-check" checked onchange="updatePlanCount()"></td>
+                  <td class="mono color-accent fw-bold">81</td><td>Грушево</td>
+                  <td class="mono">200/250</td><td>Зелена</td><td>Чорний</td><td>Вісконт</td>
+                  <td><input type="text" style="border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'IBM Plex Sans';outline:none;width:120px" placeholder="примітка..."></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="plan-check" onchange="updatePlanCount()"></td>
+                  <td class="mono fw-bold">82</td><td>Сокирниця</td>
+                  <td class="mono">120/220</td><td>Чорна</td><td>Чорний</td><td>Межирічка</td>
+                  <td><input type="text" style="border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'IBM Plex Sans';outline:none;width:120px" placeholder="примітка..."></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="plan-check" onchange="updatePlanCount()"></td>
+                  <td class="mono fw-bold">80</td><td>Туря Пасіка</td>
+                  <td class="mono">160/260</td><td>Дідкович</td><td>Латунь</td><td>Дідкович</td>
+                  <td><input type="text" style="border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'IBM Plex Sans';outline:none;width:120px" placeholder="примітка..."></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" class="plan-check" onchange="updatePlanCount()"></td>
+                  <td class="mono fw-bold">83</td><td>Кушниця</td>
+                  <td class="mono">140/240</td><td>Чорна</td><td>Латунь</td><td>Межирічка</td>
+                  <td><input type="text" style="border:none;background:transparent;color:var(--text2);font-size:12px;font-family:'IBM Plex Sans';outline:none;width:120px" placeholder="примітка..."></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head"><span class="section-head-icon">🖨️</span><span class="section-head-title">Попередній перегляд друку</span><span class="section-head-sub" style="color:var(--text3)">Без цін · Без телефонів клієнтів</span></div>
+        <div class="section-body" style="padding:0">
+          <div style="background:#fff; color:#111; padding:24px; font-family:'IBM Plex Sans'; border-radius:6px; margin:12px;">
+            <div style="text-align:center; font-size:14px; font-weight:700; margin-bottom:4px;">ПЛАН ЗАЛИВОК</div>
+            <div style="text-align:center; font-size:12px; color:#555; margin-bottom:16px;">Тиждень: 25 лютого — 3 березня 2026</div>
+            <table style="width:100%; border-collapse:collapse; font-size:12px;">
+              <thead><tr style="background:#f0f0f0;">
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">№</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Куди</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Розмір</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Рамка</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Каблук</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Плитка</th>
+                <th style="padding:8px; border:1px solid #ccc; text-align:left;">Примітка</th>
+              </tr></thead>
+              <tbody>
+                <tr><td style="padding:7px 8px;border:1px solid #ccc;font-weight:700">79</td><td style="padding:7px 8px;border:1px solid #ccc;">Кушниця</td><td style="padding:7px 8px;border:1px solid #ccc;font-family:monospace">140/240</td><td style="padding:7px 8px;border:1px solid #ccc;">Чорна</td><td style="padding:7px 8px;border:1px solid #ccc;">Чорний</td><td style="padding:7px 8px;border:1px solid #ccc;">Вісконт</td><td style="padding:7px 8px;border:1px solid #ccc;color:#888">Фото 40×50</td></tr>
+                <tr style="background:#f9f9f9"><td style="padding:7px 8px;border:1px solid #ccc;font-weight:700">81</td><td style="padding:7px 8px;border:1px solid #ccc;">Грушево</td><td style="padding:7px 8px;border:1px solid #ccc;font-family:monospace">200/250</td><td style="padding:7px 8px;border:1px solid #ccc;">Зелена</td><td style="padding:7px 8px;border:1px solid #ccc;">Чорний</td><td style="padding:7px 8px;border:1px solid #ccc;">Вісконт</td><td style="padding:7px 8px;border:1px solid #ccc;color:#888"></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px; font-size:11px; color:#888; text-align:right;">Документ для внутрішнього використання · Ціни не відображаються</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== STOCK ==================== -->
+    <div class="page" id="page-stock">
+      <div class="filters">
+        <div class="search-box"><span>🔍</span><input type="text" placeholder="Пошук товару..."></div>
+        <button class="filter-btn active">Всі</button>
+        <button class="filter-btn" onclick="showNotif('⚠️ Показую критичні залишки', 'orange')">⚠️ Критичні</button>
+        <div style="margin-left:auto"><button class="topbar-btn" onclick="showNotif('+ Прихід на склад (форма відкривається)', 'accent')">+ Прихід</button></div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card green"><div class="stat-icon">📦</div><div class="stat-label">Позицій на складі</div><div class="stat-value color-green">47</div></div>
+        <div class="stat-card orange"><div class="stat-icon">⚠️</div><div class="stat-label">Критичний залишок</div><div class="stat-value color-orange">3</div><div class="stat-sub">Менше 3 одиниць</div></div>
+        <div class="stat-card blue"><div class="stat-icon">📥</div><div class="stat-label">Надходжень цього місяця</div><div class="stat-value color-accent">12</div></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header"><span class="table-title">Складські залишки</span></div>
+        <table>
+          <thead><tr><th>Категорія</th><th>Товар</th><th>Колір / Матеріал</th><th>Залишок</th><th>Одиниця</th><th>Мін. залишок</th><th>Статус</th><th>Дія</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="text-muted fs-sm">Стела</td><td class="fw-bold">Стела кувшин</td><td>Чорний</td>
+              <td class="mono fw-bold">2</td><td>шт</td><td class="mono">3</td>
+              <td><span class="badge warn">Критично</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;" onclick="showNotif('📦 Форма приходу: Стела кувшин чорний', 'orange')">+ Замовити</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Стела</td><td class="fw-bold">Стела пряма</td><td>Межирічка</td>
+              <td class="mono fw-bold">2</td><td>шт</td><td class="mono">3</td>
+              <td><span class="badge warn">Критично</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;" onclick="showNotif('📦 Форма приходу: Стела пряма межирічка', 'orange')">+ Замовити</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Плитка</td><td class="fw-bold">Плитка Вісконт</td><td>—</td>
+              <td class="mono fw-bold">1.5</td><td>кв.м</td><td class="mono">5</td>
+              <td><span class="badge warn">Критично</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;" onclick="showNotif('📦 Форма приходу: Плитка Вісконт', 'orange')">+ Замовити</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Каблук</td><td class="fw-bold">Каблук</td><td>Чорний</td>
+              <td class="mono fw-bold color-green">18</td><td>шт</td><td class="mono">5</td>
+              <td><span class="badge planned">В нормі</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">+ Прихід</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Фундамент</td><td class="fw-bold">Рамка опалубка</td><td>Чорна</td>
+              <td class="mono fw-bold color-green">24</td><td>пог.м</td><td class="mono">10</td>
+              <td><span class="badge planned">В нормі</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">+ Прихід</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Плитка</td><td class="fw-bold">Плитка Межирічка</td><td>—</td>
+              <td class="mono fw-bold color-green">12.8</td><td>кв.м</td><td class="mono">5</td>
+              <td><span class="badge planned">В нормі</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">+ Прихід</button></td>
+            </tr>
+            <tr>
+              <td class="text-muted fs-sm">Хрест</td><td class="fw-bold">Хрест металевий</td><td>Чорний</td>
+              <td class="mono fw-bold color-green">7</td><td>шт</td><td class="mono">3</td>
+              <td><span class="badge planned">В нормі</span></td>
+              <td><button class="filter-btn" style="padding:5px 10px;font-size:11px;">+ Прихід</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== DOCUMENTS ==================== -->
+    <div class="page" id="page-documents">
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:20px;">
+        <div class="stat-card blue" style="cursor:pointer" onclick="showNotif('📄 Генерація PDF: Замовлення для клієнта...', 'accent')">
+          <div class="stat-icon">📋</div><div class="stat-label">Замовлення (клієнту)</div>
+          <div class="stat-value color-accent" style="font-size:20px; margin-top:8px;">З цінами · З телефоном</div>
+          <div class="stat-sub mt-4">Клікніть для генерації PDF ↗</div>
+        </div>
+        <div class="stat-card purple" style="cursor:pointer" onclick="showNotif('🏭 Генерація PDF: Виробничий лист для цеху...', 'accent')">
+          <div class="stat-icon">🏭</div><div class="stat-label">Виробничий лист (цех)</div>
+          <div class="stat-value" style="color:var(--purple); font-size:20px; margin-top:8px;">Без цін · Без телефону</div>
+          <div class="stat-sub mt-4">Клікніть для генерації PDF ↗</div>
+        </div>
+        <div class="stat-card green" style="cursor:pointer" onclick="navigate('week-plan', document.querySelectorAll('.nav-item')[6])">
+          <div class="stat-icon">📅</div><div class="stat-label">План тижня (бригадир)</div>
+          <div class="stat-value color-green" style="font-size:20px; margin-top:8px;">Тільки технічні дані</div>
+          <div class="stat-sub mt-4">Перейти до планування ↗</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head"><span class="section-head-icon">📄</span><span class="section-head-title">Попередній перегляд: Замовлення для клієнта</span><span class="section-head-sub">№84 · Злинсало А.В.</span></div>
+        <div class="section-body">
+          <div style="background:#fff; color:#111; padding:28px 32px; font-family:'IBM Plex Sans'; border-radius:8px; max-width:680px; margin:0 auto; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+            <div style="text-align:center; font-size:13px; font-weight:800; letter-spacing:2px; text-transform:uppercase; margin-bottom:2px;">ЗАМОВЛЕННЯ НА ВИГОТОВЛЕННЯ ТА ВСТАНОВЛЕННЯ ПАМ'ЯТНИКА</div>
+            <div style="height:2px; background:#222; margin:10px 0 16px;"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; margin-bottom:12px;">
+              <div><b>Номер замовлення:</b> №84</div>
+              <div><b>Дата оформлення:</b> 29.09.2025</div>
+              <div><b>ПІБ замовника:</b> Злинсало Анна Василівна</div>
+              <div><b>Телефон:</b> 097 763 4925</div>
+              <div><b>Місто / Кладовище:</b> Н. Яниця</div>
+              <div><b>Термін виконання:</b> до червня 2026</div>
+            </div>
+            <div style="font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#555; margin-bottom:6px;">Деталі замовлення:</div>
+            <table style="width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:12px;">
+              <thead><tr style="background:#f5f5f5;"><th style="padding:6px 10px;border:1px solid #ddd;text-align:left">Деталь</th><th style="padding:6px 10px;border:1px solid #ddd;text-align:left">Опис / Матеріал / Колір / Розмір</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Заливка</td><td style="padding:6px 10px;border:1px solid #ddd;">Рамка чорна · 120×220</td></tr>
+                <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Плитка</td><td style="padding:6px 10px;border:1px solid #ddd;">Межирічка</td></tr>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Каблук</td><td style="padding:6px 10px;border:1px solid #ddd;">Чорний</td></tr>
+                <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Бокова</td><td style="padding:6px 10px;border:1px solid #ddd;">Межирічка</td></tr>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Бордюри</td><td style="padding:6px 10px;border:1px solid #ddd;">Чорні видовжені</td></tr>
+                <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Хвилька</td><td style="padding:6px 10px;border:1px solid #ddd;">Межирічка</td></tr>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Підставка</td><td style="padding:6px 10px;border:1px solid #ddd;">Чорна 10 см + Межирічка 8 см</td></tr>
+                <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Стела</td><td style="padding:6px 10px;border:1px solid #ddd;">Кувшин + приставка межирічка</td></tr>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Хрест</td><td style="padding:6px 10px;border:1px solid #ddd;">Без хреста</td></tr>
+                <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Фото</td><td style="padding:6px 10px;border:1px solid #ddd;">Сіро · 40×50</td></tr>
+                <tr><td style="padding:6px 10px;border:1px solid #ddd;font-weight:600">Примітки</td><td style="padding:6px 10px;border:1px solid #ddd;">Шорми чорні 15 см</td></tr>
+              </tbody>
+            </table>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:12px;">
+              <div style="border:1px solid #ddd; border-radius:4px; padding:10px;">
+                <div style="font-weight:700; margin-bottom:6px;">Фінанси:</div>
+                <div>Вартість: <b>1 550 € + 250 €</b></div>
+                <div>Аванс: 1 000 ₴ · 29.09 (карта)</div>
+                <div>Залишок: <b>до сплати</b></div>
+              </div>
+              <div style="border:1px solid #ddd; border-radius:4px; padding:10px; background:#f9f9f9;">
+                <div style="font-weight:700; margin-bottom:6px;">Підписи:</div>
+                <div style="margin-bottom:12px; font-size:11px;">Замовник: _______________</div>
+                <div style="font-size:11px;">Менеджер: _______________</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex mt-4" style="justify-content:center; gap:12px;">
+            <button class="topbar-btn secondary" onclick="showNotif('📋 Скопійовано посилання на замовлення', 'accent')">🔗 Копіювати посилання</button>
+            <button class="topbar-btn secondary" onclick="showNotif('📱 Відправлено у Viber: 097 763 4925', 'green')">📱 Відправити у Viber</button>
+            <button class="topbar-btn" onclick="showNotif('⬇️ PDF завантажується...', 'green')">⬇️ Завантажити PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ANALYTICS ==================== -->
+    <div class="page" id="page-analytics">
+      <div class="stats-grid">
+        <div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-label">Замовлень за рік</div><div class="stat-value color-accent">84</div><div class="stat-sub">+22% проти 2025</div></div>
+        <div class="stat-card green"><div class="stat-icon">💰</div><div class="stat-label">Дохід 2026</div><div class="stat-value color-green">1.24М</div><div class="stat-sub">₴ · з початку року</div></div>
+        <div class="stat-card orange"><div class="stat-icon">⏳</div><div class="stat-label">Очікується оплата</div><div class="stat-value color-orange">186К</div><div class="stat-sub">₴ · залишки</div></div>
+        <div class="stat-card purple"><div class="stat-icon">📍</div><div class="stat-label">Унікальних міст</div><div class="stat-value" style="color:var(--purple)">34</div><div class="stat-sub">населених пунктів</div></div>
+      </div>
+
+      <div class="dash-row">
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">📊</span><span class="section-head-title">Замовлення по місяцях</span></div>
+          <div class="section-body">
+            <div class="chart-area" style="height:140px; align-items:flex-end;">
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:70px"></div><div class="chart-bar-label">Бер</div><div class="chart-bar-val">24</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:110px"></div><div class="chart-bar-label">Кві</div><div class="chart-bar-val">38</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:130px; background:var(--green)"></div><div class="chart-bar-label">Тра</div><div class="chart-bar-val">45</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:90px"></div><div class="chart-bar-label">Чер</div><div class="chart-bar-val">31</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:50px"></div><div class="chart-bar-label">Лип</div><div class="chart-bar-val">17</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:40px"></div><div class="chart-bar-label">Сер</div><div class="chart-bar-val">14</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:60px"></div><div class="chart-bar-label">Вер</div><div class="chart-bar-val">21</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:80px"></div><div class="chart-bar-label">Жов</div><div class="chart-bar-val">28</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:55px"></div><div class="chart-bar-label">Лис</div><div class="chart-bar-val">19</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:35px"></div><div class="chart-bar-label">Гру</div><div class="chart-bar-val">12</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:65px; background:var(--text3)"></div><div class="chart-bar-label">Січ</div><div class="chart-bar-val">23</div></div>
+              <div class="chart-bar-wrap"><div class="chart-bar" style="height:52px; background:var(--teal)"></div><div class="chart-bar-label">Лют</div><div class="chart-bar-val">18</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">📍</span><span class="section-head-title">Топ міст</span></div>
+          <div class="section-body">
+            <div class="dash-funnel">
+              <div class="funnel-row"><div class="funnel-label">Кушниця</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:80%;background:var(--accent)"></div></div><div class="funnel-count">12</div></div>
+              <div class="funnel-row"><div class="funnel-label">Сокирниця</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:55%;background:var(--accent)"></div></div><div class="funnel-count">8</div></div>
+              <div class="funnel-row"><div class="funnel-label">Грушево</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:45%;background:var(--accent)"></div></div><div class="funnel-count">7</div></div>
+              <div class="funnel-row"><div class="funnel-label">Лецовиця</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:35%;background:var(--accent)"></div></div><div class="funnel-count">5</div></div>
+              <div class="funnel-row"><div class="funnel-label">Туря Пасіка</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:25%;background:var(--accent)"></div></div><div class="funnel-count">4</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-head"><span class="section-head-icon">📋</span><span class="section-head-title">Фінансовий звіт</span>
+          <div style="margin-left:auto; display:flex; gap:8px;">
+            <select class="form-select" style="padding:6px 10px; font-size:12px;"><option>Лютий 2026</option><option>Березень 2026</option></select>
+            <button class="topbar-btn secondary" onclick="showNotif('📥 Звіт Excel завантажується...', 'green')">↓ Excel</button>
+          </div>
+        </div>
+        <div class="section-body" style="padding:0">
+          <table>
+            <thead><tr><th>#</th><th>Клієнт</th><th>Місто</th><th>Вартість</th><th>Аванс</th><th>Залишок</th><th>Статус</th></tr></thead>
+            <tbody>
+              <tr><td class="mono color-accent">#84</td><td>Злинсало А.В.</td><td>Н.Яниця</td><td class="mono color-green">1 550€</td><td class="mono">1 000₴</td><td class="mono color-orange">залишок</td><td><span class="badge advance">Аванс</span></td></tr>
+              <tr><td class="mono color-accent">#83</td><td>Кравченко М.П.</td><td>Кушниця</td><td class="mono color-green">18 500₴</td><td class="mono">5 000₴</td><td class="mono color-orange">13 500₴</td><td><span class="badge prod">Виробництво</span></td></tr>
+              <tr><td class="mono color-accent">#78</td><td>Семенченко В.О.</td><td>Лецовиця</td><td class="mono color-green">12 000₴</td><td class="mono">12 000₴</td><td class="mono" style="color:var(--green)">0₴ ✓</td><td><span class="badge done">Виконано</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SETTINGS ==================== -->
+
+    <!-- ══ СТОРІНКА ШАБЛОНИ ══ -->
+    <div class="page" id="page-templates">
+      <div style="display:grid;grid-template-columns:230px 1fr;gap:12px;align-items:start">
+        <div class="section-card">
+          <div class="section-head" style="justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="section-head-icon">📋</span>
+              <span class="section-head-title">Шаблони</span>
+            </div>
+            <button class="topbar-btn" onclick="tplNew()">+ Новий</button>
+          </div>
+          <div class="section-body"><div id="tpl-list"></div></div>
+        </div>
+        <div class="section-card">
+          <div class="section-head" style="justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="section-head-icon">✏️</span>
+              <span class="section-head-title" id="tpl-edit-title">Оберіть шаблон</span>
+            </div>
+            <button class="topbar-btn" id="tpl-save-btn" onclick="tplSave()" style="display:none">💾 Зберегти</button>
+          </div>
+          <div class="section-body" id="tpl-editor">
+            <div style="text-align:center;padding:32px;color:var(--text3);font-size:12px">Оберіть або створіть шаблон</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-settings">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">👤</span><span class="section-head-title">Профіль та доступ</span></div>
+          <div class="section-body">
+            <div class="settings-row"><div><div class="settings-label">Олеся</div><div class="settings-sub">Менеджер · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e08f8c85939981a08792818e89948993818bce9581">[email&#160;protected]</a></div></div><button class="filter-btn">Редагувати</button></div>
+            <div class="settings-row"><div><div class="settings-label">Пароль</div><div class="settings-sub">Змінено 14 днів тому</div></div><button class="filter-btn">Змінити</button></div>
+            <div class="settings-row"><div><div class="settings-label">Двофакторна автентифікація</div><div class="settings-sub">Додатковий захист облікового запису</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">🔔</span><span class="section-head-title">Сповіщення</span></div>
+          <div class="section-body">
+            <div class="settings-row"><div><div class="settings-label">Нагадування про заливку</div><div class="settings-sub">За 14 днів до встановлення</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-label">Критичний залишок складу</div><div class="settings-sub">При залишку менше 3 одиниць</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-label">Telegram-сповіщення</div><div class="settings-sub">Бот: @memorial_crm_bot</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-label">Email-сповіщення</div><div class="settings-sub">На робочу пошту</div></div><label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">🏭</span><span class="section-head-title">Довідники виробництва</span></div>
+          <div class="section-body">
+            <div class="settings-row"><div><div class="settings-label">Матеріали та кольори</div><div class="settings-sub">47 позицій</div></div><button class="filter-btn">Редагувати</button></div>
+            <div class="settings-row"><div><div class="settings-label">Розміри пам'ятників</div><div class="settings-sub">8 стандартних розмірів</div></div><button class="filter-btn">Редагувати</button></div>
+            <div class="settings-row"><div><div class="settings-label">Міста та кладовища</div><div class="settings-sub">34 населених пункти</div></div><button class="filter-btn">Редагувати</button></div>
+            <div class="settings-row"><div><div class="settings-label">Автодата заливки</div><div class="settings-sub">Термін мінус 10 днів (за замовч.)</div></div>
+              <input class="form-input" style="width:60px; padding:6px 8px; text-align:center;" value="10">
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-head"><span class="section-head-icon">🔧</span><span class="section-head-title">Система та бекап</span></div>
+          <div class="section-body">
+            <div class="settings-row"><div><div class="settings-label">Автобекап бази даних</div><div class="settings-sub">Щодня о 03:00 · Google Drive</div></div><label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="settings-row"><div><div class="settings-label">Останній бекап</div><div class="settings-sub">25.02.2026 · 03:00 · 2.4 МБ</div></div><button class="filter-btn" onclick="showNotif('✅ Бекап запущено вручну', 'green')">Запустити</button></div>
+            <div class="settings-row"><div><div class="settings-label">Cloudflare Tunnel</div><div class="settings-sub">granitisak.com · активний 🟢</div></div><span class="badge planned">Активний</span></div>
+            <div class="settings-row"><div><div class="settings-label">n8n автоматизація</div><div class="settings-sub">localhost:5678 · 6 активних workflow</div></div><span class="badge planned">Активний</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <div class="modal-title">
+      📋 Замовлення №84 — Злинсало А.В.
+      <button class="modal-close" onclick="document.getElementById('order-modal').classList.remove('open')">✕</button>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px; margin-bottom:16px;">
+      <div><span style="color:var(--text2)">Телефон:</span> <a href="viber://chat?number=0977634925" style="color:var(--accent); text-decoration:none;">097 763 4925 📱</a></div>
+      <div><span style="color:var(--text2)">Місто:</span> Н. Яниця</div>
+      <div><span style="color:var(--text2)">Термін:</span> до червня 2026</div>
+      <div><span style="color:var(--text2)">Заливка:</span> <span class="color-orange">авто</span></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px; font-weight:700; letter-spacing:0.5px; color:var(--text2); text-transform:uppercase; margin-bottom:8px;">Статус замовлення:</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <span class="badge new" style="cursor:pointer" onclick="setStatus(this,'new')">Нове</span>
+        <span class="badge calc" style="cursor:pointer" onclick="setStatus(this,'calc')">Прорахунок</span>
+        <span class="badge advance" style="cursor:pointer; border:2px solid var(--accent)" onclick="setStatus(this,'advance')">● Аванс</span>
+        <span class="badge prod" style="cursor:pointer" onclick="setStatus(this,'prod')">Виробництво</span>
+        <span class="badge art" style="cursor:pointer" onclick="setStatus(this,'art')">Художниця</span>
+        <span class="badge pour" style="cursor:pointer" onclick="setStatus(this,'pour')">Заливка</span>
+        <span class="badge planned" style="cursor:pointer" onclick="setStatus(this,'planned')">Встановлення</span>
+        <span class="badge done" style="cursor:pointer" onclick="setStatus(this,'done')">Виконано</span>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px; flex-wrap:wrap;">
+      <button class="filter-btn" onclick="showNotif('📋 Відкрито форму редагування', 'accent'); document.getElementById('order-modal').classList.remove('open')">✏️ Редагувати</button>
+      <button class="filter-btn" onclick="showNotif('🏭 Виробничий лист PDF генерується...', 'accent')">🏭 Виробничий лист</button>
+      <button class="filter-btn" onclick="showNotif('📱 Відправлено у Viber', 'green')">📱 Viber</button>
+      <button class="topbar-btn" onclick="showNotif('✅ Зміни збережено', 'green'); document.getElementById('order-modal').classList.remove('open')">Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <span class="notif-icon" id="notif-icon">✅</span>
+  <span id="notif-text">Збережено</span>
+</div>
+
+<div class="center-alert-overlay" id="center-alert" onclick="if(event.target===this) closeCenterAlert()">
+  <div class="center-alert">
+    <div class="center-alert-title">Увага</div>
+    <div class="center-alert-text" id="center-alert-text"></div>
+    <div class="center-alert-actions">
+      <button class="topbar-btn secondary" onclick="closeCenterAlert()">Закрити</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const pages = {
+  dashboard: { title:'Дашборд', bread:'Головна' },
+  orders: { title:'Замовлення', bread:'Головна / Замовлення' },
+  'new-order': { title:'Нове замовлення', bread:'Замовлення / Нове' },
+    'templates': { title:'Шаблони пам\'ятників', bread:'Шаблони' },
+  clients: { title:'Клієнти', bread:'Головна / Клієнти' },
+  planning: { title:'Планування заливок', bread:'Виробництво / Планування' },
+  'week-plan': { title:'План тижня', bread:'Виробництво / План тижня' },
+  stock: { title:'Склад', bread:'Виробництво / Склад' },
+  documents: { title:'Документи', bread:'Документи' },
+  analytics: { title:'Аналітика', bread:'Адмін / Аналітика' },
+  settings: { title:'Налаштування', bread:'Адмін / Налаштування' },
+};
+
+function navigate(pageId, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  const info = pages[pageId] || { title: pageId, bread: '' };
+  document.getElementById('page-title').textContent = info.title;
+  document.getElementById('breadcrumb').textContent = info.bread;
+  document.querySelector('.content').scrollTop = 0;
+}
+
+let isKanban = false;
+function toggleView() {
+  isKanban = !isKanban;
+  document.getElementById('orders-table-view').style.display = isKanban ? 'none' : 'block';
+  document.getElementById('orders-kanban-view').style.display = isKanban ? 'block' : 'none';
+}
+
+function filterStatus(btn, status) {
+  document.querySelectorAll('#page-orders .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function openOrderModal() {
+  document.getElementById('order-modal').classList.add('open');
+}
+
+function setStatus(el, status) {
+  showNotif('✅ Статус змінено: ' + el.textContent.trim(), 'green');
+}
+
+let notifTimer;
+function showNotif(text, type) {
+  const notif = document.getElementById('notif');
+  const icons = { green:'✅', accent:'ℹ️', orange:'⚠️' };
+  document.getElementById('notif-icon').textContent = icons[type] || '📢';
+  document.getElementById('notif-text').textContent = text;
+  notif.style.borderColor = type === 'green' ? 'rgba(46,204,113,0.4)' : type === 'orange' ? 'rgba(243,156,18,0.4)' : 'rgba(79,142,247,0.4)';
+  notif.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => notif.classList.remove('show'), 3200);
+}
+function showCenterAlert(text) {
+  const el = document.getElementById('center-alert');
+  const txt = document.getElementById('center-alert-text');
+  if (!el || !txt) return;
+  txt.textContent = text;
+  el.classList.add('open');
+}
+function closeCenterAlert() {
+  const el = document.getElementById('center-alert');
+  if (el) el.classList.remove('open');
+}
+
+function calcBalance() {
+  const total = parseFloat((document.getElementById('total-price').value || '0').replace(/\s/g,'')) || 0;
+  const adv = parseFloat((document.getElementById('advance-price').value || '0').replace(/\s/g,'')) || 0;
+  const bal = total - adv;
+  document.getElementById('balance-price').value = bal.toLocaleString('uk-UA');
+}
+
+function calcPourDate(val) {
+  document.getElementById('pour-date').value = val ? 'Авто: Термін − 10 днів' : '';
+}
+
+function updatePlanCount() {
+  const checked = document.querySelectorAll('#plan-tbody .plan-check:checked').length;
+  document.getElementById('plan-count').textContent = checked;
+}
+
+function selectAllPlan() {
+  document.querySelectorAll('#plan-tbody .plan-check').forEach(c => c.checked = !c.checked);
+  updatePlanCount();
+}
+
+// ══════════════════════════════════════════════════════════════
+// КОНСТРУКТОР + ШАБЛОНИ · Granit Isak CRM
+// ══════════════════════════════════════════════════════════════
+const PT = {"Фундамент": {"Фундамент в досках": {"—": [{"param": "розмір", "value": "120×220", "price": 130, "note": ""}]}}, "Рамка": {"Рамка": {"—": [{"param": "ширина", "value": "20см", "price": 120, "note": ""}, {"param": "ширина", "value": "25см", "price": 130, "note": ""}, {"param": "ширина", "value": "30см", "price": 140, "note": ""}, {"param": "ширина", "value": "35см", "price": 145, "note": ""}, {"param": "ширина", "value": "40см", "price": 150, "note": ""}, {"param": "ширина", "value": "45см", "price": 160, "note": ""}, {"param": "ширина", "value": "50см", "price": 165, "note": ""}]}}, "Плитка": {"Плитка": {"чорний": [{"param": "—", "value": "—", "price": 140, "note": ""}], "сірий": [{"param": "—", "value": "—", "price": 140, "note": ""}], "дідковичі": [{"param": "—", "value": "—", "price": 220, "note": ""}], "токівський": [{"param": "—", "value": "—", "price": 200, "note": ""}], "межирічка": [{"param": "—", "value": "—", "price": 200, "note": ""}], "зелений": [{"param": "—", "value": "—", "price": 190, "note": ""}], "лезнік": [{"param": "—", "value": "—", "price": 250, "note": ""}]}}, "Каблук": {"Каблук": {"чорний": [{"param": "товщина", "value": "3см", "price": 100, "note": ""}, {"param": "товщина", "value": "5см", "price": 160, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 200, "note": ""}], "сірий": [{"param": "товщина", "value": "3см", "price": 100, "note": ""}, {"param": "товщина", "value": "5см", "price": 160, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 200, "note": ""}], "дідковичі": [{"param": "товщина", "value": "3см", "price": 120, "note": ""}, {"param": "товщина", "value": "5см", "price": 170, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 250, "note": ""}], "токівський": [{"param": "товщина", "value": "3см", "price": 110, "note": ""}, {"param": "товщина", "value": "5см", "price": 150, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 210, "note": ""}], "межирічка": [{"param": "товщина", "value": "3см", "price": 110, "note": ""}, {"param": "товщина", "value": "5см", "price": 150, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 210, "note": ""}], "зелений": [{"param": "товщина", "value": "3см", "price": 105, "note": ""}, {"param": "товщина", "value": "5см", "price": 140, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 200, "note": ""}], "лезнік": [{"param": "товщина", "value": "3см", "price": 145, "note": ""}, {"param": "товщина", "value": "5см", "price": 200, "note": ""}, {"param": "товщина", "value": "фігурний", "price": 290, "note": ""}]}}, "Боковина": {"Боковина": {"чорний": [{"param": "товщина", "value": "3см", "price": 150, "note": ""}, {"param": "товщина", "value": "5см", "price": 250, "note": ""}], "сірий": [{"param": "товщина", "value": "3см", "price": 130, "note": ""}, {"param": "товщина", "value": "5см", "price": 230, "note": ""}], "дідковичі": [{"param": "товщина", "value": "3см", "price": 200, "note": ""}, {"param": "товщина", "value": "5см", "price": 300, "note": ""}], "токівський": [{"param": "товщина", "value": "3см", "price": 170, "note": ""}, {"param": "товщина", "value": "5см", "price": 270, "note": ""}], "межирічка": [{"param": "товщина", "value": "3см", "price": 170, "note": ""}, {"param": "товщина", "value": "5см", "price": 270, "note": ""}], "зелений": [{"param": "товщина", "value": "3см", "price": 160, "note": ""}, {"param": "товщина", "value": "5см", "price": 260, "note": ""}], "лезнік": [{"param": "товщина", "value": "3см", "price": 220, "note": ""}, {"param": "товщина", "value": "5см", "price": 320, "note": ""}]}}, "Угли": {"Угли 4шт": {"чорний": [{"param": "форма", "value": "квадратні", "price": 90, "note": ""}, {"param": "форма", "value": "фігурні", "price": 140, "note": ""}], "сірий": [{"param": "форма", "value": "квадратні", "price": 90, "note": ""}, {"param": "форма", "value": "фігурні", "price": 140, "note": ""}], "інший колір": [{"param": "форма", "value": "квадратні", "price": 120, "note": ""}, {"param": "форма", "value": "фігурні", "price": 160, "note": ""}]}}, "Бардюри": {"Бардюр верхній": {"чорний": [{"param": "тип", "value": "5см прямі", "price": 160, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 170, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 200, "note": ""}], "сірий": [{"param": "тип", "value": "5см прямі", "price": 160, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 170, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 200, "note": ""}], "дідковичі": [{"param": "тип", "value": "5см прямі", "price": 170, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 240, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 280, "note": ""}], "токівський": [{"param": "тип", "value": "5см прямі", "price": 180, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 210, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 240, "note": ""}], "межирічка": [{"param": "тип", "value": "5см прямі", "price": 180, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 210, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 240, "note": ""}], "зелений": [{"param": "тип", "value": "5см прямі", "price": 150, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 200, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 230, "note": ""}], "лезнік": [{"param": "тип", "value": "5см прямі", "price": 210, "note": ""}, {"param": "тип", "value": "5см видовжені", "price": 250, "note": ""}, {"param": "тип", "value": "7см фігурні", "price": 350, "note": ""}]}}, "Підставка": {"Підставка": {"чорний": [{"param": "товщина", "value": "3см", "price": 50, "note": ""}, {"param": "товщина", "value": "5см", "price": 75, "note": ""}, {"param": "товщина", "value": "10см", "price": 100, "note": ""}, {"param": "товщина", "value": "13см", "price": 120, "note": ""}], "сірий": [{"param": "товщина", "value": "3см", "price": 50, "note": ""}, {"param": "товщина", "value": "5см", "price": 75, "note": ""}, {"param": "товщина", "value": "10см", "price": 100, "note": ""}, {"param": "товщина", "value": "13см", "price": 120, "note": ""}], "дідковичі": [{"param": "товщина", "value": "3см", "price": 70, "note": ""}, {"param": "товщина", "value": "5см", "price": 90, "note": ""}, {"param": "товщина", "value": "10см", "price": 140, "note": ""}, {"param": "товщина", "value": "13см", "price": 160, "note": ""}], "токівський": [{"param": "товщина", "value": "3см", "price": 65, "note": ""}, {"param": "товщина", "value": "5см", "price": 70, "note": ""}, {"param": "товщина", "value": "10см", "price": 130, "note": ""}, {"param": "товщина", "value": "13см", "price": 155, "note": ""}], "межирічка": [{"param": "товщина", "value": "3см", "price": 65, "note": ""}, {"param": "товщина", "value": "5см", "price": 70, "note": ""}, {"param": "товщина", "value": "10см", "price": 130, "note": ""}, {"param": "товщина", "value": "13см", "price": 155, "note": ""}], "зелений": [{"param": "товщина", "value": "3см", "price": 60, "note": ""}, {"param": "товщина", "value": "5см", "price": 75, "note": ""}, {"param": "товщина", "value": "10см", "price": 120, "note": ""}, {"param": "товщина", "value": "13см", "price": 145, "note": ""}], "лезнік": [{"param": "товщина", "value": "3см", "price": 100, "note": ""}, {"param": "товщина", "value": "5см", "price": 110, "note": ""}, {"param": "товщина", "value": "10см", "price": 170, "note": ""}, {"param": "товщина", "value": "13см", "price": 190, "note": ""}]}}, "Хвильки": {"Хвильки 4шт": {"чорний": [{"param": "розмір", "value": "3см (30-35)", "price": 70, "note": ""}, {"param": "розмір", "value": "3см (40-45)", "price": 100, "note": ""}, {"param": "розмір", "value": "5см", "price": 120, "note": ""}], "сірий": [{"param": "розмір", "value": "3см (30-35)", "price": 70, "note": ""}, {"param": "розмір", "value": "3см (40-45)", "price": 100, "note": ""}, {"param": "розмір", "value": "5см", "price": 120, "note": ""}], "дідковичі": [{"param": "розмір", "value": "3см (30-35)", "price": 100, "note": ""}, {"param": "розмір", "value": "3см (40-45)", "price": 140, "note": ""}, {"param": "розмір", "value": "5см", "price": 160, "note": ""}], "токівський": [{"param": "розмір", "value": "3см (30-35)", "price": 90, "note": ""}, {"param": "розмір", "value": "3см (40-45)", "price": 135, "note": ""}], "межирічка": [{"param": "розмір", "value": "3см (30-35)", "price": 90, "note": ""}, {"param": "розмір", "value": "3см (40-45)", "price": 135, "note": ""}], "зелений": [{"param": "розмір", "value": "3см (30-35)", "price": 85, "note": "+$10 якщо є вирізи"}, {"param": "розмір", "value": "3см (40-45)", "price": 130, "note": "+$10 якщо є вирізи"}, {"param": "розмір", "value": "5см", "price": 145, "note": "+$10 якщо є вирізи"}], "лезнік": [{"param": "розмір", "value": "3см (30-35)", "price": 120, "note": "+$10 якщо є вирізи"}, {"param": "розмір", "value": "3см (40-45)", "price": 180, "note": "+$10 якщо є вирізи"}, {"param": "розмір", "value": "5см", "price": 200, "note": "+$10 якщо є вирізи"}]}}, "Накривна": {"Накривна звичайна": {"чорний": [{"param": "товщина", "value": "3см", "price": 110, "note": ""}, {"param": "товщина", "value": "5см", "price": 150, "note": ""}], "сірий": [{"param": "товщина", "value": "3см", "price": 110, "note": ""}, {"param": "товщина", "value": "5см", "price": 150, "note": ""}], "дідковичі": [{"param": "товщина", "value": "3см", "price": 180, "note": ""}, {"param": "товщина", "value": "5см", "price": 230, "note": ""}], "токівський": [{"param": "товщина", "value": "3см", "price": 160, "note": ""}, {"param": "товщина", "value": "5см", "price": 210, "note": ""}], "межирічка": [{"param": "товщина", "value": "3см", "price": 160, "note": ""}, {"param": "товщина", "value": "5см", "price": 210, "note": ""}], "зелений": [{"param": "товщина", "value": "3см", "price": 150, "note": ""}, {"param": "товщина", "value": "5см", "price": 200, "note": ""}], "лезнік": [{"param": "товщина", "value": "3см", "price": 190, "note": ""}, {"param": "товщина", "value": "5см", "price": 250, "note": ""}]}, "Накривна складна": {"чорний": [{"param": "товщина", "value": "3см", "price": 125, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 200, "note": "+$15 якщо є різблення"}], "сірий": [{"param": "товщина", "value": "3см", "price": 125, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 200, "note": "+$15 якщо є різблення"}], "дідковичі": [{"param": "товщина", "value": "3см", "price": 210, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 270, "note": "+$15 якщо є різблення"}], "токівський": [{"param": "товщина", "value": "3см", "price": 190, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 220, "note": "+$15 якщо є різблення"}], "межирічка": [{"param": "товщина", "value": "3см", "price": 190, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 220, "note": "+$15 якщо є різблення"}], "зелений": [{"param": "товщина", "value": "3см", "price": 180, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 210, "note": "+$15 якщо є різблення"}], "лезнік": [{"param": "товщина", "value": "3см", "price": 220, "note": "+$15 якщо є різблення"}, {"param": "товщина", "value": "5см", "price": 300, "note": "+$15 якщо є різблення"}]}}, "Хрест": {"Хрест": {"чорний": [{"param": "тип", "value": "православний", "price": 120, "note": ""}, {"param": "тип", "value": "католицький", "price": 100, "note": ""}], "сірий": [{"param": "тип", "value": "православний", "price": 120, "note": ""}, {"param": "тип", "value": "католицький", "price": 100, "note": ""}], "латунь": [{"param": "тип", "value": "латунь", "price": 50, "note": ""}], "інший колір": [{"param": "тип", "value": "православний", "price": 150, "note": ""}, {"param": "тип", "value": "католицький", "price": 120, "note": ""}]}}, "Стелла": {"Стелла 105-120см": {"чорний": [{"param": "форма", "value": "пряма", "price": 170, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "кувшин", "price": 190, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "фігурна", "price": 210, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}], "сірий": [{"param": "форма", "value": "пряма", "price": 170, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "кувшин", "price": 190, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "фігурна", "price": 210, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}], "інший колір": [{"param": "форма", "value": "пряма", "price": 200, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "кувшин", "price": 270, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}, {"param": "форма", "value": "фігурна", "price": 300, "note": "+$10 перо; +$100 плитка чорна на кольорову стеллу"}]}, "Стелла 90-100см": {"чорний": [{"param": "форма", "value": "пряма", "price": 125, "note": ""}, {"param": "форма", "value": "кувшин", "price": 160, "note": ""}], "сірий": [{"param": "форма", "value": "пряма", "price": 125, "note": ""}, {"param": "форма", "value": "кувшин", "price": 160, "note": ""}], "інший колір": [{"param": "форма", "value": "пряма", "price": 155, "note": ""}, {"param": "форма", "value": "кувшин", "price": 190, "note": ""}]}, "Приставка до стелли": {"чорний": [{"param": "тип", "value": "проста", "price": 50, "note": ""}, {"param": "тип", "value": "складна", "price": 100, "note": ""}], "сірий": [{"param": "тип", "value": "проста", "price": 50, "note": ""}, {"param": "тип", "value": "складна", "price": 100, "note": ""}], "інший колір": [{"param": "тип", "value": "проста", "price": 50, "note": ""}, {"param": "тип", "value": "складна", "price": 100, "note": ""}]}}};
+
+const ptCats  = ()      => Object.keys(PT);
+const ptComps = c       => c && PT[c]       ? Object.keys(PT[c])      : [];
+const ptAllComps = ()   => [...new Set(ptCats().flatMap(c => ptComps(c)))];
+const ptCatByComp = comp => ptCats().find(c => ptComps(c).includes(comp)) || '';
+const ptClrs  = (c,k)   => c && PT[c]?.[k] ? Object.keys(PT[c][k])   : [];
+const ptVals  = (c,k,l) => PT[c]?.[k]?.[l] || [];
+
+// Рамка: повний набір кольорів з орієнтовними цінами.
+// `—` залишаємо як alias до чорного, щоб не зламати наявні шаблони.
+const RAMKA_BASE = [
+  { param:'ширина', value:'20см', price:120, note:'' },
+  { param:'ширина', value:'25см', price:130, note:'' },
+  { param:'ширина', value:'30см', price:140, note:'' },
+  { param:'ширина', value:'35см', price:145, note:'' },
+  { param:'ширина', value:'40см', price:150, note:'' },
+  { param:'ширина', value:'45см', price:160, note:'' },
+  { param:'ширина', value:'50см', price:165, note:'' },
+];
+const RAMKA_COLOR_OFFSETS = {
+  'чорний': 0,
+  'сірий': -5,
+  'дідковичі': 35,
+  'токівський': 20,
+  'межирічка': 20,
+  'зелений': 10,
+  'лезнік': 55,
+};
+if (PT['Рамка']?.['Рамка']) {
+  const mapped = Object.fromEntries(
+    Object.entries(RAMKA_COLOR_OFFSETS).map(([clr, off]) => [
+      clr,
+      RAMKA_BASE.map(x => ({ ...x, price: x.price + off }))
+    ])
+  );
+  mapped['—'] = mapped['чорний'].map(x => ({ ...x }));
+  PT['Рамка']['Рамка'] = mapped;
+}
+
+function mkSel(opts, sel) {
+  let h = '<option value="">—</option>';
+  opts.forEach(o => h += '<option value="' + o + '"' + (o===sel?' selected':'') + '>' + o + '</option>');
+  return h;
+}
+
+const COL_W = 'minmax(0,1.35fr) minmax(0,.9fr) minmax(0,.85fr) minmax(0,.95fr) 72px minmax(0,.95fr) 38px';
+
+function mkHdrs() {
+  const labels = ['Компонент','Колір','Параметр','Значення','Ціна $','Примітка',''];
+  return '<div style="display:grid;grid-template-columns:' + COL_W + ';gap:6px;padding:0 4px 8px;border-bottom:1px solid var(--border2);margin-bottom:4px;">'
+    + labels.map(l => '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">' + l + '</div>').join('')
+    + '</div>';
+}
+
+function mkDelBtn(fn, id) {
+  return `<button onclick='${fn}(${JSON.stringify(id)})'
+    style="width:34px;height:34px;background:rgba(200,50,50,.2);border:1px solid rgba(220,70,70,.5);
+    border-radius:5px;color:#ff8888;cursor:pointer;font-size:20px;line-height:34px;text-align:center;
+    flex-shrink:0;display:block;transition:.15s"
+    onmouseover="this.style.background='rgba(220,50,50,.45)'"
+    onmouseout="this.style.background='rgba(200,50,50,.2)'">×</button>`;
+}
+
+function mkRow(row, delFn) {
+  const d = document.createElement('div');
+  d.style.cssText = 'display:grid;grid-template-columns:' + COL_W + ';gap:6px;padding:4px;margin-bottom:3px;border-radius:5px;align-items:center;';
+  d.onmouseover = () => d.style.background = 'rgba(255,255,255,.03)';
+  d.onmouseout  = () => d.style.background = '';
+  const fsInp = 'font-size:11px;padding:5px 7px';
+  const fsSel = 'font-size:11px;padding:5px 34px 5px 7px';
+  d.innerHTML =
+    '<select class="form-select" data-f="comp" style="' + fsSel + '">' + mkSel(ptAllComps(),                                 row.comp) + '</select>' +
+    '<select class="form-select" data-f="clr"  style="' + fsSel + '">' + mkSel(ptClrs(row.cat, row.comp),                   row.clr)  + '</select>' +
+    '<input  class="form-input"  data-f="param" value="' + (row.param||'') + '" readonly style="' + fsInp + ';color:var(--text2)">' +
+    '<select class="form-select" data-f="val"  style="' + fsSel + '">' + mkSel(ptVals(row.cat,row.comp,row.clr).map(x=>x.value), row.val) + '</select>' +
+    '<input  class="form-input"  data-f="price" type="number" value="' + (row.price||'') + '" style="' + fsInp + ';color:#5DBF8A;font-weight:600">' +
+    '<input  class="form-input"  data-f="note"  value="' + (row.note||'')  + '" placeholder="—" style="' + fsInp + ';color:var(--text2)">' +
+    mkDelBtn(delFn, row.id);
+  return d;
+}
+
+function applySelectionDefaults(r) {
+  const colors = ptClrs(r.cat, r.comp);
+  if (!colors.length) {
+    r.clr = ''; r.val = ''; r.param = ''; r.price = ''; r.note = '';
+    return;
+  }
+  if (!colors.includes(r.clr)) r.clr = colors[0];
+
+  const vals = ptVals(r.cat, r.comp, r.clr);
+  if (!vals.length) {
+    r.val = ''; r.param = ''; r.price = ''; r.note = '';
+    return;
+  }
+  const picked = vals.find(x => x.value === r.val) || vals[0];
+  r.val = picked.value;
+  r.param = picked.param;
+  r.price = picked.price;
+  r.note = picked.note;
+}
+
+function bindRow(d, row, arr, onPrice) {
+  d.querySelector('[data-f="comp"]').onchange = function() {
+    const r = arr.find(x=>x.id===row.id); if(!r) return;
+    r.comp=this.value;
+    r.cat=ptCatByComp(r.comp);
+    r.clr=''; r.param=''; r.val=''; r.price=''; r.note='';
+    applySelectionDefaults(r);
+    refreshRow(d, r);
+    if (onPrice) onPrice();
+    if (arr === cRows) checkFrameTileRule(true);
+    if (arr === tplRows) checkTplFrameTileRule(true);
+  };
+  d.querySelector('[data-f="clr"]').onchange = function() {
+    const r = arr.find(x=>x.id===row.id); if(!r) return;
+    r.clr=this.value; r.param=''; r.val=''; r.price=''; r.note='';
+    applySelectionDefaults(r);
+    refreshRow(d, r);
+    if (onPrice) onPrice();
+  };
+  d.querySelector('[data-f="val"]').onchange = function() {
+    const r = arr.find(x=>x.id===row.id); if(!r) return;
+    r.val = this.value;
+    applySelectionDefaults(r);
+    d.querySelector('[data-f="param"]').value = r.param || '';
+    const pi = d.querySelector('[data-f="price"]');
+    pi.value = r.price || '';
+    pi.style.transition = '.3s';
+    pi.style.background = 'rgba(93,191,138,.25)';
+    setTimeout(() => pi.style.background = '', 700);
+    d.querySelector('[data-f="note"]').value = r.note || '';
+    if (onPrice) onPrice();
+  };
+  d.querySelector('[data-f="price"]').oninput = function() {
+    const r = arr.find(x=>x.id===row.id); if(r) r.price = parseFloat(this.value)||0;
+    if (onPrice) onPrice();
+  };
+  d.querySelector('[data-f="note"]').oninput = function() {
+    const r = arr.find(x=>x.id===row.id); if(r) r.note = this.value;
+  };
+}
+
+function refreshRow(d, row) {
+  if (row.comp && !row.cat) row.cat = ptCatByComp(row.comp);
+  if (row.comp) applySelectionDefaults(row);
+  d.querySelector('[data-f="comp"]').innerHTML = mkSel(ptAllComps(), row.comp);
+  d.querySelector('[data-f="clr"]').innerHTML  = mkSel(ptClrs(row.cat,row.comp), row.clr);
+  d.querySelector('[data-f="val"]').innerHTML  = mkSel(ptVals(row.cat,row.comp,row.clr).map(x=>x.value), row.val);
+  d.querySelector('[data-f="param"]').value = row.param||'';
+  d.querySelector('[data-f="price"]').value = row.price||'';
+  d.querySelector('[data-f="note"]').value  = row.note||'';
+}
+
+// ══ БАЗОВІ МОДЕЛІ ═════════════════════════════════════════════
+let baseModels = {};
+try { baseModels = JSON.parse(localStorage.getItem('gi_models')||'{}'); } catch(e) {}
+if (!Object.keys(baseModels).length) {
+  baseModels = {
+    'Стандарт чорний': [
+      {cat:'Фундамент',comp:'Фундамент в досках',clr:'—',param:'розмір',val:'120×220',price:130,note:''},
+      {cat:'Рамка',comp:'Рамка',clr:'—',param:'ширина',val:'30см',price:140,note:''},
+      {cat:'Плитка',comp:'Плитка',clr:'чорний',param:'—',val:'—',price:140,note:''},
+      {cat:'Каблук',comp:'Каблук',clr:'чорний',param:'товщина',val:'5см',price:160,note:''},
+      {cat:'Боковина',comp:'Боковина',clr:'чорний',param:'товщина',val:'3см',price:150,note:''},
+      {cat:'Бардюри',comp:'Бардюр верхній',clr:'чорний',param:'тип',val:'5см прямі',price:160,note:''},
+      {cat:'Підставка',comp:'Підставка',clr:'чорний',param:'товщина',val:'5см',price:75,note:''},
+      {cat:'Накривна',comp:'Накривна звичайна',clr:'чорний',param:'товщина',val:'5см',price:150,note:''},
+      {cat:'Стелла',comp:'Стелла 105-120см',clr:'чорний',param:'форма',val:'пряма',price:170,note:'+$10 перо'},
+    ],
+    'Економ сірий': [
+      {cat:'Фундамент',comp:'Фундамент в досках',clr:'—',param:'розмір',val:'120×220',price:130,note:''},
+      {cat:'Рамка',comp:'Рамка',clr:'—',param:'ширина',val:'20см',price:120,note:''},
+      {cat:'Каблук',comp:'Каблук',clr:'сірий',param:'товщина',val:'3см',price:100,note:''},
+      {cat:'Підставка',comp:'Підставка',clr:'сірий',param:'товщина',val:'3см',price:50,note:''},
+      {cat:'Стелла',comp:'Стелла 90-100см',clr:'сірий',param:'форма',val:'пряма',price:125,note:''},
+    ],
+    'Кольоровий дідковичі': [
+      {cat:'Фундамент',comp:'Фундамент в досках',clr:'—',param:'розмір',val:'120×220',price:130,note:''},
+      {cat:'Рамка',comp:'Рамка',clr:'—',param:'ширина',val:'30см',price:140,note:''},
+      {cat:'Плитка',comp:'Плитка',clr:'дідковичі',param:'—',val:'—',price:220,note:''},
+      {cat:'Каблук',comp:'Каблук',clr:'дідковичі',param:'товщина',val:'5см',price:170,note:''},
+      {cat:'Боковина',comp:'Боковина',clr:'дідковичі',param:'товщина',val:'3см',price:200,note:''},
+      {cat:'Накривна',comp:'Накривна звичайна',clr:'дідковичі',param:'товщина',val:'3см',price:180,note:''},
+      {cat:'Стелла',comp:'Стелла 105-120см',clr:'інший колір',param:'форма',val:'кувшин',price:270,note:'+$10 перо; +$100 плитка'},
+    ]
+  };
+  localStorage.setItem('gi_models', JSON.stringify(baseModels));
+}
+let _uid = 1;
+const uid = () => 'r' + (_uid++);
+
+function saveModels() {
+  localStorage.setItem('gi_models', JSON.stringify(baseModels));
+  refreshModelSelect();
+}
+
+function refreshModelSelect() {
+  const s = document.getElementById('baseModelSelect'); if(!s) return;
+  s.innerHTML = '<option value="">— оберіть шаблон або заповніть вручну —</option>';
+  Object.keys(baseModels).forEach(n =>
+    s.innerHTML += '<option value="' + n + '">' + n + ' (' + baseModels[n].length + ' ел.)</option>'
+  );
+}
+
+// ══ КОНСТРУКТОР (Блок 2) ══════════════════════════════════════
+let cRows = [];
+let frameTileWarnShown = false;
+
+function checkFrameTileRule(showWarning) {
+  const hasFrame = cRows.some(r => r.comp === 'Рамка');
+  const hasTile  = cRows.some(r => r.comp === 'Плитка');
+  const hasIssue = hasFrame && !hasTile;
+  const card = document.getElementById('constructor-card');
+  if (card) {
+    card.style.borderColor = hasIssue ? 'rgba(243,156,18,.65)' : 'var(--border)';
+    card.style.boxShadow   = hasIssue ? '0 0 0 2px rgba(243,156,18,.16)' : 'none';
+  }
+  if (showWarning && hasIssue && !frameTileWarnShown) {
+    showCenterAlert('Якщо обрана Рамка, потрібно додати Плитку');
+  }
+  frameTileWarnShown = hasIssue;
+  return hasIssue;
+}
+
+function loadBaseModel() {
+  const n = document.getElementById('baseModelSelect').value;
+  if (!n || !baseModels[n]) { clearConstructor(); return; }
+  cRows = baseModels[n].map(r => ({...r, id: uid()}));
+  cRender();
+}
+
+function clearConstructor() {
+  cRows = [];
+  const s = document.getElementById('baseModelSelect'); if(s) s.value = '';
+  cRender();
+}
+
+function cRender() {
+  const cont = document.getElementById('c-rows');
+  const hdrs = document.getElementById('c-headers');
+  const emp  = document.getElementById('c-empty');
+  if (!cont) return;
+  if (hdrs) hdrs.innerHTML = mkHdrs();
+  cont.innerHTML = '';
+  if (!cRows.length) {
+    if (emp)  emp.style.display = 'block';
+    cTotal();
+    checkFrameTileRule(false);
+    return;
+  }
+  if (emp)  emp.style.display = 'none';
+  cRows.forEach(r => {
+    const d = mkRow(r, 'cDel');
+    bindRow(d, r, cRows, cTotal);
+    cont.appendChild(d);
+  });
+  cTotal();
+  checkFrameTileRule(true);
+}
+
+function cAddRow() {
+  const r = {id:uid(),cat:'',comp:'',clr:'',param:'',val:'',price:'',note:''};
+  cRows.push(r);
+  const hdrs = document.getElementById('c-headers');
+  const emp  = document.getElementById('c-empty');
+  if (hdrs && !hdrs.innerHTML) hdrs.innerHTML = mkHdrs();
+  if (emp) emp.style.display = 'none';
+  const d = mkRow(r, 'cDel');
+  bindRow(d, r, cRows, cTotal);
+  d.style.animation = 'rowIn .18s ease';
+  document.getElementById('c-rows').appendChild(d);
+  d.querySelector('select').focus();
+  cTotal();
+  checkFrameTileRule(true);
+}
+
+function cDel(id) {
+  cRows = cRows.filter(r => r.id !== id);
+  const el = document.getElementById('c-rows').querySelector('[id]');
+  // remove by finding div that contains button with this id in onclick
+  const rows = document.getElementById('c-rows');
+  rows.querySelectorAll('div').forEach(d => {
+    const btn = d.querySelector('button[onclick*="' + id + '"]');
+    if (btn && d.parentNode === rows) d.remove();
+  });
+  if (!cRows.length) {
+    const emp  = document.getElementById('c-empty');
+    if (emp) emp.style.display = 'block';
+  }
+  cTotal();
+  checkFrameTileRule(true);
+}
+
+function cTotal() {
+  const t = cRows.reduce((s,r) => s + (parseFloat(r.price)||0), 0);
+  const el = document.getElementById('constructor-total'); if(el) el.textContent = t;
+  const tf = document.getElementById('total-price');
+  if (tf && t > 0) { tf.value = t; if(typeof calcBalance==='function') calcBalance(); }
+}
+
+// ══ ШАБЛОНИ ═══════════════════════════════════════════════════
+let tplName = null;
+let tplRows = [];
+let tplFrameTileWarnShown = false;
+
+function checkTplFrameTileRule(showWarning) {
+  const hasFrame = tplRows.some(r => r.comp === 'Рамка');
+  const hasTile  = tplRows.some(r => r.comp === 'Плитка');
+  const hasIssue = hasFrame && !hasTile;
+  const panel = document.getElementById('tpl-editor');
+  if (panel) {
+    panel.style.border = hasIssue ? '1px solid rgba(243,156,18,.5)' : 'none';
+    panel.style.borderRadius = hasIssue ? '8px' : '';
+    panel.style.boxShadow = hasIssue ? '0 0 0 2px rgba(243,156,18,.12) inset' : 'none';
+  }
+  if (showWarning && hasIssue && !tplFrameTileWarnShown) {
+    showCenterAlert('Якщо обрана Рамка, потрібно додати Плитку');
+  }
+  tplFrameTileWarnShown = hasIssue;
+  return hasIssue;
+}
+
+function renderTemplatesPage() {
+  tplRenderList();
+}
+
+function tplRenderList() {
+  const list = document.getElementById('tpl-list'); if(!list) return;
+  const names = Object.keys(baseModels);
+  if (!names.length) {
+    list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">Ще немає шаблонів</div>';
+    return;
+  }
+  list.innerHTML = '';
+  names.forEach(n => {
+    const d = document.createElement('div');
+    d.className = 'tpl-item-card' + (tplName===n ? ' active' : '');
+    d.innerHTML = `<div>
+    <div class="tpl-item-title">${n}</div>
+    <div class="tpl-item-meta">${baseModels[n].length} елементів</div>
+    </div>
+    <div class="tpl-item-actions">
+      <button class="tpl-icon-btn" data-tip="Редагувати" title="Редагувати" aria-label="Редагувати шаблон" onclick='tplEdit(${JSON.stringify(n)})'>✏</button>
+      <button class="tpl-icon-btn danger" data-tip="Видалити" title="Видалити" aria-label="Видалити шаблон" onclick='tplDelete(${JSON.stringify(n)})'>🗑</button>
+    </div>`;
+    d.onmouseover = () => d.style.borderColor = 'var(--accent)';
+    d.onmouseout  = () => d.style.borderColor = (tplName===n ? 'var(--accent)' : 'var(--border2)');
+    list.appendChild(d);
+  });
+}
+
+function tplNew() {
+  const n = prompt('Назва нового шаблону:');
+  if (!n || !n.trim()) return;
+  if (baseModels[n]) { alert('Такий шаблон вже існує'); return; }
+  baseModels[n] = [];
+  saveModels();
+  tplEdit(n);
+}
+
+function tplDelete(n) {
+  if (!confirm('Видалити шаблон "' + n + '"?')) return;
+  delete baseModels[n];
+  if (tplName === n) { tplName = null; tplRows = []; tplRenderEditor(); }
+  saveModels();
+  tplRenderList();
+}
+
+function tplEdit(n) {
+  tplName = n;
+  tplRows = (baseModels[n]||[]).map(r => ({...r, id: uid()}));
+  tplRenderList();
+  tplRenderEditor();
+}
+
+function tplRenderEditor() {
+  const panel = document.getElementById('tpl-editor');
+  const title = document.getElementById('tpl-edit-title');
+  const btn   = document.getElementById('tpl-save-btn');
+  if (!panel) return;
+  if (!tplName) {
+    panel.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text3);font-size:12px">Оберіть або створіть шаблон</div>';
+    panel.style.border = 'none';
+    panel.style.boxShadow = 'none';
+    if (title) title.textContent = 'Оберіть шаблон';
+    if (btn)   btn.style.display = 'none';
+    return;
+  }
+  if (title) title.textContent = '✏️ ' + tplName;
+  if (btn)   btn.style.display = '';
+  panel.innerHTML = `<div id="t-hdrs">${tplRows.length ? mkHdrs() : ''}</div>
+  <div id="t-rows"></div>
+  <button onclick="tplAddRow()" style="width:100%;margin-top:8px;padding:10px;border:1px dashed var(--border2);background:transparent;color:var(--text3);border-radius:6px;cursor:pointer;font-size:12px;transition:.2s"
+  onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+  onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">＋ Додати елемент</button>`;
+  const cont = document.getElementById('t-rows');
+  tplRows.forEach(r => {
+    const d = mkRow(r, 'tplDel');
+    bindRow(d, r, tplRows, null);
+    cont.appendChild(d);
+  });
+  checkTplFrameTileRule(true);
+}
+
+function tplAddRow() {
+  const r = {id:uid(),cat:'',comp:'',clr:'',param:'',val:'',price:'',note:''};
+  tplRows.push(r);
+  const hdrs = document.getElementById('t-hdrs');
+  if (hdrs && !hdrs.innerHTML) hdrs.innerHTML = mkHdrs();
+  const d = mkRow(r, 'tplDel');
+  bindRow(d, r, tplRows, null);
+  d.style.animation = 'rowIn .18s ease';
+  document.getElementById('t-rows').appendChild(d);
+  d.querySelector('select').focus();
+  checkTplFrameTileRule(true);
+}
+
+function tplDel(id) {
+  tplRows = tplRows.filter(r => r.id !== id);
+  const cont = document.getElementById('t-rows');
+  cont.querySelectorAll('div').forEach(d => {
+    const btn = d.querySelector('button[onclick*="' + id + '"]');
+    if (btn && d.parentNode === cont) d.remove();
+  });
+  const hdrs = document.getElementById('t-hdrs');
+  if (hdrs && !tplRows.length) hdrs.innerHTML = '';
+  checkTplFrameTileRule(true);
+}
+
+function tplSave() {
+  if (!tplName) return;
+  baseModels[tplName] = tplRows.map(({id,...rest}) => rest);
+  saveModels();
+  tplRenderList();
+  const btn = document.getElementById('tpl-save-btn');
+  if (btn) { const o=btn.textContent; btn.textContent='✓ Збережено'; setTimeout(()=>btn.textContent=o, 1500); }
+}
+
+// ── Анімація + Ініт ───────────────────────────────────────────
+const _s = document.createElement('style');
+_s.textContent = '@keyframes rowIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}';
+document.head.appendChild(_s);
+
+function initConstructor() { refreshModelSelect(); cRender(); }
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initConstructor);
+} else { initConstructor(); }
+
+</script>
+</body>
+</html>

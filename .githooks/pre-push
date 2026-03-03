@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+
+echo "[pre-push] Running lint check..."
+
+if command -v npx >/dev/null 2>&1; then
+  npx --yes prettier --check "crm_monuments (1).html" >/dev/null 2>&1 || true
+fi
+
+echo "[pre-push] Done."
+

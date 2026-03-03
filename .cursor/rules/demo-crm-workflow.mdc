@@ -1,0 +1,32 @@
+---
+description: Guardrails for single-file CRM demo edits
+alwaysApply: true
+---
+
+# CRM Demo Workflow Rule
+
+## Scope
+- Main app lives in `crm_monuments (1).html`.
+- Keep delivery as a single file unless user explicitly asks otherwise.
+
+## Change Discipline
+- Prefer minimal, targeted edits over broad refactors.
+- Preserve behavior unless user asks for behavior changes.
+- Keep backward compatibility for existing `PT` entries and template data.
+- When changing constructor/template logic, update both flows if they share helpers.
+
+## UI Safety
+- Keep controls usable in narrow columns (`select` arrow area, truncation, spacing).
+- Do not remove existing actions; compact UI is allowed if discoverability remains.
+- For icon-only actions, include `title` and `aria-label`.
+
+## Communication Style (UA)
+- Default replies in Ukrainian.
+- Keep answers concise and practical; avoid long theory unless requested.
+- For changes: state what changed, where, and expected visible effect.
+- Prioritize UI/UX outcomes and quick verification steps.
+
+## Validation
+- After substantive edits, run lints on edited files.
+- Mention required hard refresh (`Ctrl+F5`) when CSS/JS cache may mask changes.
+

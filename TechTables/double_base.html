@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Double Base 220x220</title>
+  <style>
+    :root {
+      --bg:#0f1117; --surface:#161b27; --border:#2a3347; --text:#e8ecf4; --text2:#8b97b5; --accent:#4f8ef7; --warn:#f39c12;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
+    .wrap { max-width: 1400px; margin:0 auto; padding:16px; }
+    .head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    h1 { margin:0; font-size:20px; }
+    .sub { color:var(--text2); font-size:13px; }
+    .back { color:var(--accent); text-decoration:none; font-size:13px; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:12px; }
+    .card h2 { margin:0; padding:12px 14px; border-bottom:1px solid var(--border); font-size:15px; }
+    .content { padding:12px; }
+    .chip { display:inline-block; margin:3px 6px 3px 0; padding:3px 8px; border:1px solid var(--border); border-radius:999px; font-size:11px; color:var(--text2); }
+    .table-wrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:1000px; }
+    th, td { padding:8px 10px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; font-size:12px; }
+    th { color:var(--text2); font-size:11px; text-transform:uppercase; letter-spacing:.5px; white-space:nowrap; }
+    tr:hover td { background: rgba(255,255,255,.03); }
+    .warn { color: var(--warn); }
+    .err { color:#ff9090; padding:10px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>База Double 220x220</h1>
+        <div class="sub">Джерело: <code>double_base.json</code></div>
+      </div>
+      <a class="back" href="./index.html">← До списку таблиць</a>
+    </div>
+
+    <div class="card">
+      <h2>Метадані</h2>
+      <div class="content" id="meta"></div>
+    </div>
+
+    <div class="card">
+      <h2>Normalization notes</h2>
+      <div class="content" id="norm"></div>
+    </div>
+
+    <div class="card">
+      <h2>Каталог Double</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Категорія</th>
+              <th>Компонент</th>
+              <th>Параметр</th>
+              <th>Колір</th>
+              <th>Значення</th>
+              <th>Ціна</th>
+              <th>Примітка</th>
+              <th>Питання</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="err" class="err"></div>
+  </div>
+
+  <script>
+    function flatten(items) {
+      const out = [];
+      for (const it of items || []) {
+        const base = {
+          category: it.category || '',
+          component: it.component || '',
+          param: it.param || '',
+          questions: (it.questions || []).join(' | ')
+        };
+        const colors = it.colors || {};
+        for (const [color, payload] of Object.entries(colors)) {
+          const options = (payload && payload.options) || [];
+          for (const opt of options) {
+            out.push({
+              ...base,
+              color,
+              value: opt.value ?? '',
+              price: opt.price ?? '',
+              note: opt.note ?? ''
+            });
+          }
+        }
+      }
+      return out;
+    }
+
+    async function load() {
+      const metaEl = document.getElementById('meta');
+      const normEl = document.getElementById('norm');
+      const rowsEl = document.getElementById('rows');
+      const errEl = document.getElementById('err');
+      try {
+        const res = await fetch('./double_base.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        metaEl.innerHTML = Object.entries(data.meta || {})
+          .map(([k,v]) => `<div><strong>${k}</strong>: ${String(v)}</div>`).join('');
+
+        normEl.innerHTML = (data.normalization_notes || [])
+          .map(n => `<span class="chip">${n}</span>`).join('');
+
+        const flat = flatten(data.catalog_double_220x220 || []);
+        rowsEl.innerHTML = flat.map(r => `
+          <tr>
+            <td>${r.category}</td>
+            <td>${r.component}</td>
+            <td>${r.param}</td>
+            <td>${r.color}</td>
+            <td>${r.value}</td>
+            <td>${r.price}</td>
+            <td>${r.note || ''}</td>
+            <td class="warn">${r.questions || ''}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        errEl.textContent = `Не вдалося завантажити JSON. Якщо відкрито через file://, запусти локальний сервер. Деталі: ${e.message}`;
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
+

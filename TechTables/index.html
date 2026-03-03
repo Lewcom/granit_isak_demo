@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechTables Viewer</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #161b27;
+      --border: #2a3347;
+      --text: #e8ecf4;
+      --text2: #8b97b5;
+      --accent: #4f8ef7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    h1 { margin: 0 0 8px; font-size: 20px; }
+    p { margin: 0 0 16px; color: var(--text2); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    a {
+      display: block;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      background: #1d2435;
+    }
+    a:hover { border-color: var(--accent); color: var(--accent); }
+    code { color: #9fc0ff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>TechTables</h1>
+    <p>Оберіть потрібну таблицю. Дані підтягнуться з відповідного JSON у цій папці.</p>
+    <div class="grid">
+      <a href="./components_catalog.html">Каталог компонентів (Single) — <code>components_catalog.json</code></a>
+      <a href="./single_base.html">База Single — <code>single_base.json</code></a>
+      <a href="./double_base.html">База Double 220x220 — <code>double_base.json</code></a>
+    </div>
+  </div>
+</body>
+</html>
+

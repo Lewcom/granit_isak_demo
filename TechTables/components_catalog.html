@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог компонентів</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #161b27;
+      --border: #2a3347;
+      --text: #e8ecf4;
+      --text2: #8b97b5;
+      --accent: #4f8ef7;
+      --ok: #2ecc71;
+      --warn: #f39c12;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 16px; }
+    .head {
+      display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px;
+    }
+    h1 { margin: 0; font-size: 20px; }
+    .sub { color: var(--text2); font-size: 13px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+    .card h2 { margin: 0; padding: 12px 14px; font-size: 15px; border-bottom: 1px solid var(--border); }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 980px; }
+    th, td { border-bottom: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; font-size: 12px; }
+    th { color: var(--text2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .pill {
+      display: inline-block; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--border);
+      font-size: 11px; margin-right: 4px; margin-bottom: 4px; color: var(--text2);
+    }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .toolbar { margin-bottom: 10px; display: flex; gap: 8px; align-items: center; }
+    input[type="search"] {
+      width: 320px; max-width: 100%; padding: 8px 10px; border-radius: 8px;
+      border: 1px solid var(--border); background: #1d2435; color: var(--text);
+    }
+    .back { color: var(--accent); text-decoration: none; font-size: 13px; }
+    .error { padding: 12px; color: #ff9090; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <h1>Каталог компонентів (Single)</h1>
+        <div class="sub">Джерело: <code>components_catalog.json</code></div>
+      </div>
+      <a class="back" href="./index.html">← До списку таблиць</a>
+    </div>
+
+    <div class="card">
+      <h2>Aliases (нормалізація назв)</h2>
+      <div id="aliases" style="padding:10px 12px"></div>
+    </div>
+
+    <div class="card">
+      <h2>Компоненти</h2>
+      <div class="toolbar" style="padding: 10px 12px 0;">
+        <input id="search" type="search" placeholder="Пошук по категорії/компоненту/кольору/значенню..." />
+        <span class="sub" id="count"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Категорія</th>
+              <th>Компонент</th>
+              <th>Параметр</th>
+              <th>Колір</th>
+              <th>Тип запису</th>
+              <th>Значення</th>
+              <th>Ціна</th>
+              <th>Примітка</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="err" class="error" style="display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    const tbody = document.getElementById('tbody');
+    const aliasesEl = document.getElementById('aliases');
+    const countEl = document.getElementById('count');
+    const searchEl = document.getElementById('search');
+    const errEl = document.getElementById('err');
+    let rows = [];
+
+    function flattenCatalog(catalog) {
+      const out = [];
+      for (const item of catalog) {
+        const base = {
+          category: item.category || '',
+          component: item.component || '',
+          param: item.param || ''
+        };
+        const colors = item.colors || {};
+        for (const [color, payload] of Object.entries(colors)) {
+          if (payload.alias_to) {
+            out.push({ ...base, color, recordType: 'alias', value: '', price: '', note: `alias -> ${payload.alias_to}` });
+            continue;
+          }
+          if (payload.offset_from_black !== undefined) {
+            out.push({ ...base, color, recordType: 'offset', value: '', price: payload.offset_from_black, note: 'відхилення від чорного' });
+            continue;
+          }
+          const options = payload.options || [];
+          for (const opt of options) {
+            out.push({
+              ...base,
+              color,
+              recordType: 'option',
+              value: opt.value ?? '',
+              price: opt.price ?? '',
+              note: opt.note ?? ''
+            });
+          }
+        }
+      }
+      return out;
+    }
+
+    function renderAliases(aliases) {
+      aliasesEl.innerHTML = '';
+      for (const [k, arr] of Object.entries(aliases || {})) {
+        const div = document.createElement('div');
+        div.style.marginBottom = '6px';
+        div.innerHTML = `<span class="pill">${k}</span> → ${(arr || []).map(v => `<span class="pill ok">${v}</span>`).join('')}`;
+        aliasesEl.appendChild(div);
+      }
+    }
+
+    function renderTable(filter = '') {
+      const q = filter.trim().toLowerCase();
+      const filtered = q ? rows.filter(r =>
+        [r.category, r.component, r.param, r.color, r.value, String(r.price), r.note].join(' ').toLowerCase().includes(q)
+      ) : rows;
+      tbody.innerHTML = filtered.map(r => `
+        <tr>
+          <td>${r.category}</td>
+          <td>${r.component}</td>
+          <td>${r.param}</td>
+          <td>${r.color}</td>
+          <td class="${r.recordType === 'option' ? 'ok' : 'warn'}">${r.recordType}</td>
+          <td>${r.value}</td>
+          <td>${r.price}</td>
+          <td>${r.note || ''}</td>
+        </tr>
+      `).join('');
+      countEl.textContent = `Рядків: ${filtered.length}`;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('./components_catalog.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        renderAliases(data.aliases);
+        rows = flattenCatalog(data.catalog_single || []);
+        renderTable();
+      } catch (e) {
+        errEl.style.display = 'block';
+        errEl.textContent = `Не вдалося завантажити JSON. Якщо відкрито через file://, запусти локальний сервер. Деталі: ${e.message}`;
+      }
+    }
+
+    searchEl.addEventListener('input', () => renderTable(searchEl.value));
+    load();
+  </script>
+</body>
+</html>
+
