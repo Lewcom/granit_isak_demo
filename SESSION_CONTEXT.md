@@ -1,63 +1,52 @@
-# Session Context Summary
+# Session Context (Optimized)
 
-## Проєкт
-- Один основний файл: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
-- Демо CRM (SPA) у форматі single-file: HTML + CSS + JS
+## Core Project
+- Main client file: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
+- Architecture: single-file CRM demo (HTML + CSS + JS, no split requested)
 
-## Що вже зроблено
+## Data/Docs Layer
+- Tech data folder: `d:\AI_Project\Demo\TechTables`
+- JSON sources:
+  - `components_catalog.json` (single catalog + aliases)
+  - `single_base.json`
+  - `double_base.json` (double 220x220 draft from client photos)
+- Readable HTML views (auto `fetch` JSON):
+  - `index.html`, `components_catalog.html`, `single_base.html`, `double_base.html`
 
-### 1) Виправлення кнопок і JS-рядків
-- Полагоджені зламані `onclick`/hover-рядки через лапки.
-- Працюють кнопки:
-  - `Редагувати/Видалити` у секції шаблонів
-  - `×` для видалення рядків у конструкторі/редакторі шаблонів
+## Key Implemented Behavior
+- Constructor + template editor share row logic (`mkRow`, `bindRow`, `refreshRow`).
+- Hidden `Категорія` in UI; `cat` kept in data and derived from `comp`.
+- Autofill works on `Компонент/Колір/Значення` via `applySelectionDefaults(...)`.
+- Rule `Рамка -> Плитка` is warning-only in both flows:
+  - constructor (`cRows`)
+  - templates (`tplRows`)
+- Warning is centered modal with close button + overlay close.
 
-### 2) Конструктор: UI і дані
-- `Категорія` прибрана з видимого UI конструктора.
-- У даних поле `cat` залишене; тепер виводиться автоматично з `comp`.
-- Повернуті заголовки колонок у конструкторі (`#c-headers` більше не прихований).
+## UI Decisions
+- Template cards are super-compact (150px), multi-line title, icon actions.
+- Icon buttons have `title` and `aria-label`.
+- Select overlap fixed by:
+  - right padding in CSS + inline select padding in `mkRow`.
+- Price column narrowed; current grid:
+- `COL_W = 'minmax(0,1.35fr) minmax(0,.9fr) minmax(0,.85fr) minmax(0,.95fr) 72px minmax(0,.95fr) 38px'`
 
-### 3) Автопідтягування в рядках
-- Додано `applySelectionDefaults(...)`.
-- При зміні `Компонент`/`Колір` автоматично підтягуються:
-  - `Значення`, `Параметр`, `Ціна`, `Примітка`.
-- При зміні `Значення` ціна/параметр теж оновлюються коректно.
+## Workflow Guardrails
+- Cursor rule: `.cursor/rules/demo-crm-workflow.mdc`
+- Project skills:
+  - `.cursor/skills/ui-regression-check/SKILL.md`
+  - `.cursor/skills/pt-catalog-editor/SKILL.md`
+  - `.cursor/skills/session-handoff/SKILL.md`
+- Local hooks active via `.githooks` (`pre-commit`, `pre-push`)
 
-### 4) Бізнес-правило `Рамка -> Плитка` (warning-only)
-- Логіка реалізована для:
-  - конструктора (`cRows`)
-  - редактора шаблонів (`tplRows`)
-- Якщо є `Рамка` і немає `Плитка`:
-  - показується попередження,
-  - без автоблокування і без автододавання плитки.
+## Git Status
+- Repo initialized and pushed to GitHub.
+- Remote: `origin -> https://github.com/Lewcom/granit_isak_demo.git`
+- Tracking branch: `master -> origin/master`
+- Latest commits:
+  - `2ed4e59` rename main CRM file + update references
+  - `ed17cd8` initial bootstrap (rules, skills, TechTables, demo updates)
 
-### 5) Попередження по центру екрана
-- Для правила `Рамка -> Плитка` використовується центральний alert:
-  - overlay + кнопка `Закрити`
-  - закриття також кліком по фону
-- Звичайні toast-нотифікації `showNotif(...)` лишилися для інших дій.
-
-### 6) Шаблони: картки
-- Картки шаблонів зроблені компактнішими:
-  - текст зверху
-  - кнопки внизу
-
-### 7) Сітка рядків і ціна
-- Поточна сітка:
-- `COL_W = 'minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr) 72px minmax(0,1fr) 38px'`
-- Колонка `Ціна $` звужена до `72px` (під 5-значні значення).
-
-### 8) Проблема тексту під стрілкою select
-- Основна причина: inline-стиль у `mkRow` перезаписував правий відступ.
-- Виправлено:
-  - для `input`: `fsInp`
-  - для `select`: `fsSel = 'font-size:11px;padding:5px 34px 5px 7px'`
-- Тобто запас справа під стрілку тепер задається прямо в `mkRow`.
-
-## Поточний стан
-- Лінтер після змін: без помилок.
-- Git-репозиторій не ініціалізований (комітів немає).
-
-## Якщо продовжувати
-- За потреби збільшити відступ справа для select у `fsSel` до `36-38px`.
-- За потреби додати у центральне попередження soft-action кнопку `Додати Плитку`.
+## Open Items / Next Steps
+- Double data still marked draft where source is ambiguous (notably frame color logic).
+- Optional: add soft-action button `Додати Плитку` to center warning modal.
+- Optional: tighten select spacing further if future long labels appear.
