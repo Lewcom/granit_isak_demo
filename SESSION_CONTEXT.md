@@ -1,7 +1,7 @@
 # Session Context Summary
 
 ## Проєкт
-- Один основний файл: `d:\AI_Project\Demo\crm_monuments (1).html`
+- Один основний файл: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
 - Демо CRM (SPA) у форматі single-file: HTML + CSS + JS
 
 ## Що вже зроблено

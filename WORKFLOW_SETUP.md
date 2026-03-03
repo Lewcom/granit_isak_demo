@@ -26,5 +26,5 @@ powershell -ExecutionPolicy Bypass -File ".githooks/install-hooks.ps1"
 
 ## Notes
 - Hooks are lightweight and safe: if `npx`/tools are missing, they skip checks.
-- Main delivery model remains single-file (`crm_monuments (1).html`).
+- Main delivery model remains single-file (`granit-isak-crm-demo.html`).
 

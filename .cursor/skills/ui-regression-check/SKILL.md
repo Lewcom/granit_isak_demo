@@ -6,7 +6,7 @@ description: Runs a focused visual and behavior checklist for the single-file CR
 # UI Regression Check
 
 ## Target
-- `crm_monuments (1).html`
+- `granit-isak-crm-demo.html`
 
 ## Checklist
 - Template cards render with expected compact sizing and actions remain clickable.

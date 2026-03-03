@@ -6,7 +6,7 @@ alwaysApply: true
 # CRM Demo Workflow Rule
 
 ## Scope
-- Main app lives in `crm_monuments (1).html`.
+- Main app lives in `granit-isak-crm-demo.html`.
 - Keep delivery as a single file unless user explicitly asks otherwise.
 
 ## Change Discipline
