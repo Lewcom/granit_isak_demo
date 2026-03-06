@@ -2,54 +2,44 @@
 
 ## Core Project
 - Main app file: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
-- Architecture: single-file CRM demo (HTML/CSS/JS), no file splitting.
+- Architecture: single-file CRM demo (HTML/CSS/JS), no splitting in client-facing file.
 
-## Current UI/Data Model
-- Constructor and template editor use shared row pipeline:
-  - `mkRow(...)`, `bindRow(...)`, `refreshRow(...)`, `applySelectionDefaults(...)`
-- Each row has monument type field: `mtype` (`single`/`double`).
-- Prices/options are filtered by `mtype` (not label-only).
-- Rule `Рамка -> Плитка` stays warning-only in constructor and templates.
-- `Категорія` remains hidden in UI, but stored as `cat` in row data.
+## Runtime Model (CRM)
+- Constructor + template editor are synchronized via shared row logic.
+- `mtype` (`single|double`) is used in CRM filtering and pricing logic.
+- Business rule `Рамка -> Плитка` is warning-only and does not block editing.
+- UI hides `Категорія`, but category stays in data model.
 
-## Key Recent Changes
-- Added `Single/Double` column into constructor/template rows.
-- Implemented typed catalog logic in app (`PT` + double dataset merged for filtering by `mtype`).
-- Added 4 presets (2 Single + 2 Double) with `mtype`-aware prices:
-  - `Single — Стандарт 120×220`
-  - `Single — Кольоровий 120×220`
-  - `Double — Стандарт 220×220`
-  - `Double — Кольоровий 220×220`
-- Fixed init order bug so `Рамка` colors/widths show correctly for both types.
+## Data Tables Status
+- `TechTables/components_catalog.json` = full catalog (single + double).
+- `TechTables/single_base.json` and `TechTables/double_base.json` = type-focused selections.
+- Recently added and synced in catalogs/CRM:
+  - color `вісконт`,
+  - components `Стовпчики`, `Колони`, `Шари (куля)`, `Квітник`.
 
-## TechTables Status
-- Folder: `d:\AI_Project\Demo\TechTables`
-- `components_catalog.json` is now FULL:
-  - `catalog_single`
-  - `catalog_double_220x220`
-- `single_base.json` and `double_base.json` are type-specific views.
-- View pages:
-  - `components_catalog.html` shows Full catalog with type filter.
-  - `single_base.html` has detailed Single table.
-  - `double_base.html` has detailed Double table.
-- In table views, column order aligned to:
-  - `Колір` -> `Параметр` -> `Значення`
-- Offset/alias rows are expanded to concrete color/price lines in viewers for readability.
+## DB Transition Status
+- Working folder: `d:\AI_Project\Demo\DB_Transition`
+- Current unified dataset:
+  - `components_unified_v1.json`
+  - `colors_dictionary.json`
+  - `params_dictionary.json`
+  - `options_dictionary.json`
+- Normalization done:
+  - `Бардюр верхній`: split into `ширина + форма`
+  - `Хвильки 4шт`: split into `товщина + діапазон`
+- Pricing type decision:
+  - moved from param pair (`variant`) to dedicated technical column `pricing_type`.
+  - formula remains `final_price = price + option_value`.
 
-## Workflow Files
-- Rule: `.cursor/rules/demo-crm-workflow.mdc`
-- Skills:
-  - `.cursor/skills/ui-regression-check/SKILL.md`
-  - `.cursor/skills/pt-catalog-editor/SKILL.md`
-  - `.cursor/skills/session-handoff/SKILL.md`
-- Setup notes: `d:\AI_Project\Demo\WORKFLOW_SETUP.md`
+## Git / Backup State
+- Local backup commit exists: `bf55904`
+- Branch: `master`
+- Remote: `origin = https://github.com/Lewcom/granit_isak_demo.git`
 
 ## Quick Restart Checklist
-1. Open `granit-isak-crm-demo.html`.
-2. Validate constructor row behavior:
-   - switch `Single/Double`
-   - pick `Рамка`
-   - confirm color list and prices change by type
-3. Open `TechTables/index.html` and verify:
-   - Full catalog page loads both types
-   - Single/Double pages show detailed rows with expected column order
+1. Open `granit-isak-crm-demo.html` and verify constructor/template editor load.
+2. Check `Рамка`:
+   - both types available via `mtype`,
+   - colors include full set including `вісконт`.
+3. Open `TechTables/index.html` and verify table viewers load.
+4. For DB design work, continue from `DB_Transition/STRUCTURE_PROPOSAL.md` + `DB_Transition/DECISIONS.md`.
