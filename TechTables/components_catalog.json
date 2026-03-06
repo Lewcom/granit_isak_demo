@@ -3,8 +3,10 @@
     "project": "Granit Isak CRM demo",
     "source_file": "granit-isak-crm-demo.html",
     "sync_mode": "manual-mirror",
-    "updated_scope": "single-current-catalog",
-    "currency": "$"
+    "updated_scope": "full-catalog-single-double",
+    "currency": "$",
+    "validated_against_single_photos": "2026-03-01 partial",
+    "catalog_types": ["single", "double"]
   },
   "aliases": {
     "чор/сір": [
@@ -15,7 +17,14 @@
       "чорний",
       "сірий"
     ],
+    "чорн/сір": [
+      "чорний",
+      "сірий"
+    ],
     "дідкович": [
+      "дідковичі"
+    ],
+    "дідков": [
       "дідковичі"
     ],
     "ток/межир": [
@@ -255,6 +264,125 @@
         "чорний": { "options": [{ "value": "проста", "price": 50 }, { "value": "складна", "price": 100 }] },
         "сірий": { "options": [{ "value": "проста", "price": 50 }, { "value": "складна", "price": 100 }] },
         "інший колір": { "options": [{ "value": "проста", "price": 50 }, { "value": "складна", "price": 100 }] }
+      }
+    }
+  ],
+  "catalog_double_220x220": [
+    {
+      "category": "Фундамент",
+      "component": "Фундамент в досках",
+      "param": "розмір",
+      "colors": {
+        "—": {
+          "options": [
+            { "value": "220×220", "price": 250, "note": "" }
+          ]
+        }
+      }
+    },
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "param": "ширина",
+      "colors": {
+        "чорний": {
+          "options": [
+            { "value": "20см", "price": 190, "note": "" },
+            { "value": "25см", "price": 195, "note": "" },
+            { "value": "30см", "price": 200, "note": "" },
+            { "value": "35см", "price": 225, "note": "" },
+            { "value": "40см", "price": 250, "note": "" },
+            { "value": "45см", "price": 255, "note": "" },
+            { "value": "50см", "price": 260, "note": "" }
+          ]
+        },
+        "сірий": { "offset_from_black": -5 },
+        "дідковичі": { "offset_from_black": 35 },
+        "токівський": { "offset_from_black": 20 },
+        "межирічка": { "offset_from_black": 20 },
+        "зелений": { "offset_from_black": 10 },
+        "лезнік": { "offset_from_black": 55 },
+        "—": { "alias_to": "чорний" }
+      }
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "param": "—",
+      "colors": {
+        "чорний": { "options": [{ "value": "—", "price": 200, "note": "" }] },
+        "сірий": { "options": [{ "value": "—", "price": 200, "note": "" }] },
+        "дідковичі": { "options": [{ "value": "—", "price": 290, "note": "" }] },
+        "токівський": { "options": [{ "value": "—", "price": 280, "note": "" }] },
+        "межирічка": { "options": [{ "value": "—", "price": 280, "note": "" }] },
+        "зелений": { "options": [{ "value": "—", "price": 260, "note": "" }] },
+        "лезнік": { "options": [{ "value": "—", "price": 380, "note": "" }] }
+      }
+    },
+    {
+      "category": "Каблук",
+      "component": "Каблук",
+      "param": "товщина",
+      "colors": {
+        "чорний": { "options": [{ "value": "3см", "price": 130 }, { "value": "5см", "price": 210 }, { "value": "фігурний", "price": 200 }] },
+        "сірий": { "options": [{ "value": "3см", "price": 130 }, { "value": "5см", "price": 210 }, { "value": "фігурний", "price": 200 }] },
+        "дідковичі": { "options": [{ "value": "3см", "price": 160 }, { "value": "5см", "price": 220 }, { "value": "фігурний", "price": 320 }] },
+        "токівський": { "options": [{ "value": "3см", "price": 150 }, { "value": "5см", "price": 200 }, { "value": "фігурний", "price": 270 }] },
+        "межирічка": { "options": [{ "value": "3см", "price": 150 }, { "value": "5см", "price": 200 }, { "value": "фігурний", "price": 270 }] },
+        "зелений": { "options": [{ "value": "3см", "price": 150 }, { "value": "5см", "price": 200 }, { "value": "фігурний", "price": 260 }] },
+        "лезнік": { "options": [{ "value": "3см", "price": 200 }, { "value": "5см", "price": 260 }, { "value": "фігурний", "price": 380 }] }
+      }
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "param": "товщина",
+      "colors": {
+        "чорний": { "options": [{ "value": "3см", "price": 200 }, { "value": "5см", "price": 320 }] },
+        "сірий": { "options": [{ "value": "3см", "price": 200 }, { "value": "5см", "price": 310 }] },
+        "дідковичі": { "options": [{ "value": "3см", "price": 300 }, { "value": "5см", "price": 400 }] },
+        "токівський": { "options": [{ "value": "3см", "price": 270 }, { "value": "5см", "price": 400 }] },
+        "межирічка": { "options": [{ "value": "3см", "price": 270 }, { "value": "5см", "price": 400 }] },
+        "зелений": { "options": [{ "value": "3см", "price": 250 }, { "value": "5см", "price": 370 }] },
+        "лезнік": { "options": [{ "value": "3см", "price": 320 }, { "value": "5см", "price": 440 }] }
+      }
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "param": "форма",
+      "colors": {
+        "чорний": { "options": [{ "value": "квадратні", "price": 90 }, { "value": "фігурні", "price": 140 }] },
+        "сірий": { "options": [{ "value": "квадратні", "price": 90 }, { "value": "фігурні", "price": 140 }] },
+        "інший колір": { "options": [{ "value": "квадратні", "price": 120 }, { "value": "фігурні", "price": 160 }] }
+      }
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "param": "тип",
+      "colors": {
+        "чорний": { "options": [{ "value": "5см прямі", "price": 240 }, { "value": "5см видовжені", "price": 250 }, { "value": "7см фігурні", "price": 300 }] },
+        "сірий": { "options": [{ "value": "5см прямі", "price": 240 }, { "value": "5см видовжені", "price": 250 }, { "value": "7см фігурні", "price": 300 }] },
+        "дідковичі": { "options": [{ "value": "5см прямі", "price": 250 }, { "value": "5см видовжені", "price": 360 }, { "value": "7см фігурні", "price": 420 }] },
+        "токівський": { "options": [{ "value": "5см прямі", "price": 260 }, { "value": "5см видовжені", "price": 315 }, { "value": "7см фігурні", "price": 360 }] },
+        "межирічка": { "options": [{ "value": "5см прямі", "price": 260 }, { "value": "5см видовжені", "price": 315 }, { "value": "7см фігурні", "price": 360 }] },
+        "зелений": { "options": [{ "value": "5см прямі", "price": 230 }, { "value": "5см видовжені", "price": 300 }, { "value": "7см фігурні", "price": 350 }] },
+        "лезнік": { "options": [{ "value": "5см прямі", "price": 330 }, { "value": "5см видовжені", "price": 380 }, { "value": "7см фігурні", "price": 530 }] }
+      }
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "param": "товщина",
+      "colors": {
+        "чорний": { "options": [{ "value": "3см", "price": 100 }, { "value": "5см", "price": 150 }, { "value": "10см", "price": 200 }, { "value": "13см", "price": 240 }] },
+        "сірий": { "options": [{ "value": "3см", "price": 100 }, { "value": "5см", "price": 150 }, { "value": "10см", "price": 200 }, { "value": "13см", "price": 240 }] },
+        "дідковичі": { "options": [{ "value": "3см", "price": 140 }, { "value": "5см", "price": 180 }, { "value": "10см", "price": 280 }, { "value": "13см", "price": 320 }] },
+        "токівський": { "options": [{ "value": "3см", "price": 130 }, { "value": "5см", "price": 140 }, { "value": "10см", "price": 260 }, { "value": "13см", "price": 310 }] },
+        "межирічка": { "options": [{ "value": "3см", "price": 130 }, { "value": "5см", "price": 140 }, { "value": "10см", "price": 260 }, { "value": "13см", "price": 310 }] },
+        "зелений": { "options": [{ "value": "3см", "price": 120 }, { "value": "5см", "price": 150 }, { "value": "10см", "price": 240 }, { "value": "13см", "price": 290 }] },
+        "лезнік": { "options": [{ "value": "3см", "price": 200 }, { "value": "5см", "price": 220 }, { "value": "10см", "price": 340 }, { "value": "13см", "price": 380 }] }
       }
     }
   ]

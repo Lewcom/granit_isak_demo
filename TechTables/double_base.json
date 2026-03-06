@@ -2,8 +2,8 @@
   "meta": {
     "product_type": "double",
     "variant": "220x220",
-    "source": "client photos 2-1/2-2",
-    "status": "draft-needs-confirmation",
+    "source": "granit-isak-crm-demo.html/PT_TYPED (mtype=double) + client photos 2-1/2-2",
+    "status": "aligned-with-ui-mtype-filter",
     "currency": "$"
   },
   "normalization_notes": [
@@ -30,16 +30,45 @@
       "component": "Рамка на подвійний",
       "param": "ширина",
       "colors": {
-        "—": {
+        "чорний": {
           "options": [
             { "value": "20см", "price": 190 },
+            { "value": "25см", "price": 195 },
             { "value": "30см", "price": 200 },
-            { "value": "40см", "price": 250 }
+            { "value": "35см", "price": 225 },
+            { "value": "40см", "price": 250 },
+            { "value": "45см", "price": 255 },
+            { "value": "50см", "price": 260 }
           ]
+        },
+        "сірий": {
+          "offset_from_black": -5
+        },
+        "дідковичі": {
+          "offset_from_black": 35
+        },
+        "токівський": {
+          "offset_from_black": 20
+        },
+        "межирічка": {
+          "offset_from_black": 20
+        },
+        "зелений": {
+          "offset_from_black": 10
+        },
+        "лезнік": {
+          "offset_from_black": 55
+        },
+        "—": {
+          "alias_to": "чорний"
         }
       },
       "questions": [
-        "У джерелі немає розбивки по кольорах. Потрібно підтвердження: ціни є універсальні чи базові для чорн/сір?"
+        "Рішення від 02.03.2026: для Single і Double тримати розширені ширини рамки та повний набір кольорів."
+      ],
+      "notes": [
+        "Ціни 20/30/40 взяті з фото-джерела.",
+        "Ширини 25/35/45/50 додані як розширення каталогу за бізнес-рішенням."
       ]
     },
     {

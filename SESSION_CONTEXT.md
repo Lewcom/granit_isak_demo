@@ -1,52 +1,55 @@
-# Session Context (Optimized)
+# Session Context (Current)
 
 ## Core Project
-- Main client file: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
-- Architecture: single-file CRM demo (HTML + CSS + JS, no split requested)
+- Main app file: `d:\AI_Project\Demo\granit-isak-crm-demo.html`
+- Architecture: single-file CRM demo (HTML/CSS/JS), no file splitting.
 
-## Data/Docs Layer
-- Tech data folder: `d:\AI_Project\Demo\TechTables`
-- JSON sources:
-  - `components_catalog.json` (single catalog + aliases)
-  - `single_base.json`
-  - `double_base.json` (double 220x220 draft from client photos)
-- Readable HTML views (auto `fetch` JSON):
-  - `index.html`, `components_catalog.html`, `single_base.html`, `double_base.html`
+## Current UI/Data Model
+- Constructor and template editor use shared row pipeline:
+  - `mkRow(...)`, `bindRow(...)`, `refreshRow(...)`, `applySelectionDefaults(...)`
+- Each row has monument type field: `mtype` (`single`/`double`).
+- Prices/options are filtered by `mtype` (not label-only).
+- Rule `Рамка -> Плитка` stays warning-only in constructor and templates.
+- `Категорія` remains hidden in UI, but stored as `cat` in row data.
 
-## Key Implemented Behavior
-- Constructor + template editor share row logic (`mkRow`, `bindRow`, `refreshRow`).
-- Hidden `Категорія` in UI; `cat` kept in data and derived from `comp`.
-- Autofill works on `Компонент/Колір/Значення` via `applySelectionDefaults(...)`.
-- Rule `Рамка -> Плитка` is warning-only in both flows:
-  - constructor (`cRows`)
-  - templates (`tplRows`)
-- Warning is centered modal with close button + overlay close.
+## Key Recent Changes
+- Added `Single/Double` column into constructor/template rows.
+- Implemented typed catalog logic in app (`PT` + double dataset merged for filtering by `mtype`).
+- Added 4 presets (2 Single + 2 Double) with `mtype`-aware prices:
+  - `Single — Стандарт 120×220`
+  - `Single — Кольоровий 120×220`
+  - `Double — Стандарт 220×220`
+  - `Double — Кольоровий 220×220`
+- Fixed init order bug so `Рамка` colors/widths show correctly for both types.
 
-## UI Decisions
-- Template cards are super-compact (150px), multi-line title, icon actions.
-- Icon buttons have `title` and `aria-label`.
-- Select overlap fixed by:
-  - right padding in CSS + inline select padding in `mkRow`.
-- Price column narrowed; current grid:
-- `COL_W = 'minmax(0,1.35fr) minmax(0,.9fr) minmax(0,.85fr) minmax(0,.95fr) 72px minmax(0,.95fr) 38px'`
+## TechTables Status
+- Folder: `d:\AI_Project\Demo\TechTables`
+- `components_catalog.json` is now FULL:
+  - `catalog_single`
+  - `catalog_double_220x220`
+- `single_base.json` and `double_base.json` are type-specific views.
+- View pages:
+  - `components_catalog.html` shows Full catalog with type filter.
+  - `single_base.html` has detailed Single table.
+  - `double_base.html` has detailed Double table.
+- In table views, column order aligned to:
+  - `Колір` -> `Параметр` -> `Значення`
+- Offset/alias rows are expanded to concrete color/price lines in viewers for readability.
 
-## Workflow Guardrails
-- Cursor rule: `.cursor/rules/demo-crm-workflow.mdc`
-- Project skills:
+## Workflow Files
+- Rule: `.cursor/rules/demo-crm-workflow.mdc`
+- Skills:
   - `.cursor/skills/ui-regression-check/SKILL.md`
   - `.cursor/skills/pt-catalog-editor/SKILL.md`
   - `.cursor/skills/session-handoff/SKILL.md`
-- Local hooks active via `.githooks` (`pre-commit`, `pre-push`)
+- Setup notes: `d:\AI_Project\Demo\WORKFLOW_SETUP.md`
 
-## Git Status
-- Repo initialized and pushed to GitHub.
-- Remote: `origin -> https://github.com/Lewcom/granit_isak_demo.git`
-- Tracking branch: `master -> origin/master`
-- Latest commits:
-  - `2ed4e59` rename main CRM file + update references
-  - `ed17cd8` initial bootstrap (rules, skills, TechTables, demo updates)
-
-## Open Items / Next Steps
-- Double data still marked draft where source is ambiguous (notably frame color logic).
-- Optional: add soft-action button `Додати Плитку` to center warning modal.
-- Optional: tighten select spacing further if future long labels appear.
+## Quick Restart Checklist
+1. Open `granit-isak-crm-demo.html`.
+2. Validate constructor row behavior:
+   - switch `Single/Double`
+   - pick `Рамка`
+   - confirm color list and prices change by type
+3. Open `TechTables/index.html` and verify:
+   - Full catalog page loads both types
+   - Single/Double pages show detailed rows with expected column order

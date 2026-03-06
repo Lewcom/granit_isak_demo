@@ -56,8 +56,8 @@
             <tr>
               <th>Категорія</th>
               <th>Компонент</th>
-              <th>Параметр</th>
               <th>Колір</th>
+              <th>Параметр</th>
               <th>Значення</th>
               <th>Ціна</th>
               <th>Примітка</th>
@@ -83,7 +83,33 @@
           questions: (it.questions || []).join(' | ')
         };
         const colors = it.colors || {};
+        const blackOptions = (colors['чорний'] && colors['чорний'].options) || [];
         for (const [color, payload] of Object.entries(colors)) {
+          if (payload && payload.alias_to) {
+            const targetOptions = (colors[payload.alias_to] && colors[payload.alias_to].options) || [];
+            for (const opt of targetOptions) {
+              out.push({
+                ...base,
+                color,
+                value: opt.value ?? '',
+                price: opt.price ?? '',
+                note: `alias -> ${payload.alias_to}`
+              });
+            }
+            continue;
+          }
+          if (payload && payload.offset_from_black !== undefined) {
+            for (const opt of blackOptions) {
+              out.push({
+                ...base,
+                color,
+                value: opt.value ?? '',
+                price: (Number(opt.price) || 0) + Number(payload.offset_from_black || 0),
+                note: `від чорного: ${payload.offset_from_black >= 0 ? '+' : ''}${payload.offset_from_black}`
+              });
+            }
+            continue;
+          }
           const options = (payload && payload.options) || [];
           for (const opt of options) {
             out.push({
@@ -120,8 +146,8 @@
           <tr>
             <td>${r.category}</td>
             <td>${r.component}</td>
-            <td>${r.param}</td>
             <td>${r.color}</td>
+            <td>${r.param}</td>
             <td>${r.value}</td>
             <td>${r.price}</td>
             <td>${r.note || ''}</td>

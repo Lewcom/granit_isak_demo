@@ -1,7 +1,7 @@
 {
   "meta": {
     "product_type": "single",
-    "source": "granit-isak-crm-demo.html/PT",
+    "source": "granit-isak-crm-demo.html/PT_TYPED (mtype=single)",
     "sync_mode": "manual-mirror"
   },
   "rules": {
@@ -9,7 +9,10 @@
     "frame_requires_tile_warning_only": true,
     "notes": [
       "У поточному UI це warning-only, без автоблокувань.",
-      "Категорія в UI прихована, але в даних зберігається як cat."
+      "Категорія в UI прихована, але в даних зберігається як cat.",
+      "За фото Single 120/220 (01.03.2026) підтверджені ціни по більшості компонентів.",
+      "Рамка для Single у UI тримається з розширеною лінійкою 20-50см і повним набором кольорів.",
+      "Тип пам'ятника вибирається полем mtype (single/double) і фільтрує значення та ціни."
     ]
   },
   "component_families": [
@@ -50,9 +53,8 @@
     }
   ],
   "default_templates": [
-    "Стандарт чорний",
-    "Економ сірий",
-    "Кольоровий дідковичі"
+    "Single — Стандарт 120×220",
+    "Single — Кольоровий 120×220"
   ]
 }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Каталог компонентів</title>
+  <title>Каталог компонентів (Full)</title>
   <style>
     :root {
       --bg: #0f1117;
@@ -49,7 +49,7 @@
   <div class="wrap">
     <div class="head">
       <div>
-        <h1>Каталог компонентів (Single)</h1>
+        <h1>Каталог компонентів (Full: Single + Double)</h1>
         <div class="sub">Джерело: <code>components_catalog.json</code></div>
       </div>
       <a class="back" href="./index.html">← До списку таблиць</a>
@@ -63,19 +63,25 @@
     <div class="card">
       <h2>Компоненти</h2>
       <div class="toolbar" style="padding: 10px 12px 0;">
-        <input id="search" type="search" placeholder="Пошук по категорії/компоненту/кольору/значенню..." />
+        <input id="search" type="search" placeholder="Пошук по типу/категорії/компоненту/кольору/значенню..." />
+        <select id="typeFilter" style="padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#1d2435;color:var(--text);">
+          <option value="all">Всі типи</option>
+          <option value="single">Single</option>
+          <option value="double">Double</option>
+        </select>
         <span class="sub" id="count"></span>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
+              <th>Тип</th>
               <th>Категорія</th>
               <th>Компонент</th>
-              <th>Параметр</th>
               <th>Колір</th>
-              <th>Тип запису</th>
+              <th>Параметр</th>
               <th>Значення</th>
+              <th>Тип запису</th>
               <th>Ціна</th>
               <th>Примітка</th>
             </tr>
@@ -92,25 +98,41 @@
     const aliasesEl = document.getElementById('aliases');
     const countEl = document.getElementById('count');
     const searchEl = document.getElementById('search');
+    const typeFilterEl = document.getElementById('typeFilter');
     const errEl = document.getElementById('err');
     let rows = [];
 
-    function flattenCatalog(catalog) {
+    function flattenCatalog(catalog, mtype) {
       const out = [];
       for (const item of catalog) {
         const base = {
+          mtype: mtype || '',
           category: item.category || '',
           component: item.component || '',
           param: item.param || ''
         };
         const colors = item.colors || {};
+        const blackOptions = (colors['чорний'] && colors['чорний'].options) || [];
         for (const [color, payload] of Object.entries(colors)) {
           if (payload.alias_to) {
             out.push({ ...base, color, recordType: 'alias', value: '', price: '', note: `alias -> ${payload.alias_to}` });
             continue;
           }
           if (payload.offset_from_black !== undefined) {
-            out.push({ ...base, color, recordType: 'offset', value: '', price: payload.offset_from_black, note: 'відхилення від чорного' });
+            if (blackOptions.length) {
+              for (const opt of blackOptions) {
+                out.push({
+                  ...base,
+                  color,
+                  recordType: 'option(calc)',
+                  value: opt.value ?? '',
+                  price: (Number(opt.price) || 0) + Number(payload.offset_from_black || 0),
+                  note: `від чорного: ${payload.offset_from_black >= 0 ? '+' : ''}${payload.offset_from_black}`
+                });
+              }
+            } else {
+              out.push({ ...base, color, recordType: 'offset', value: '', price: payload.offset_from_black, note: 'відхилення від чорного' });
+            }
             continue;
           }
           const options = payload.options || [];
@@ -139,24 +161,26 @@
       }
     }
 
-    function renderTable(filter = '') {
+    function renderTable(filter = '', typeFilter = 'all') {
       const q = filter.trim().toLowerCase();
       const filtered = q ? rows.filter(r =>
-        [r.category, r.component, r.param, r.color, r.value, String(r.price), r.note].join(' ').toLowerCase().includes(q)
+        [r.mtype, r.category, r.component, r.param, r.color, r.value, String(r.price), r.note].join(' ').toLowerCase().includes(q)
       ) : rows;
-      tbody.innerHTML = filtered.map(r => `
+      const typed = typeFilter === 'all' ? filtered : filtered.filter(r => r.mtype === typeFilter);
+      tbody.innerHTML = typed.map(r => `
         <tr>
+          <td>${r.mtype}</td>
           <td>${r.category}</td>
           <td>${r.component}</td>
-          <td>${r.param}</td>
           <td>${r.color}</td>
-          <td class="${r.recordType === 'option' ? 'ok' : 'warn'}">${r.recordType}</td>
+          <td>${r.param}</td>
           <td>${r.value}</td>
+          <td class="${r.recordType === 'option' ? 'ok' : 'warn'}">${r.recordType}</td>
           <td>${r.price}</td>
           <td>${r.note || ''}</td>
         </tr>
       `).join('');
-      countEl.textContent = `Рядків: ${filtered.length}`;
+      countEl.textContent = `Рядків: ${typed.length}`;
     }
 
     async function load() {
@@ -165,7 +189,10 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         renderAliases(data.aliases);
-        rows = flattenCatalog(data.catalog_single || []);
+        rows = [
+          ...flattenCatalog(data.catalog_single || [], 'single'),
+          ...flattenCatalog(data.catalog_double_220x220 || [], 'double')
+        ];
         renderTable();
       } catch (e) {
         errEl.style.display = 'block';
@@ -173,7 +200,8 @@
       }
     }
 
-    searchEl.addEventListener('input', () => renderTable(searchEl.value));
+    searchEl.addEventListener('input', () => renderTable(searchEl.value, typeFilterEl.value));
+    typeFilterEl.addEventListener('change', () => renderTable(searchEl.value, typeFilterEl.value));
     load();
   </script>
 </body>

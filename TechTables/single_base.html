@@ -60,20 +60,95 @@
       <div class="content" id="templates"></div>
     </div>
 
+    <div class="card">
+      <h2>Детальна вибірка Single</h2>
+      <div class="content">
+        <table>
+          <thead>
+            <tr>
+              <th>Категорія</th>
+              <th>Компонент</th>
+              <th>Колір</th>
+              <th>Параметр</th>
+              <th>Значення</th>
+              <th>Тип запису</th>
+              <th>Ціна</th>
+              <th>Примітка</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div id="err" class="err"></div>
   </div>
 
   <script>
+    function flattenCatalog(catalog) {
+      const out = [];
+      for (const item of catalog || []) {
+        const base = {
+          category: item.category || '',
+          component: item.component || '',
+          param: item.param || ''
+        };
+        const colors = item.colors || {};
+        const blackOptions = (colors['чорний'] && colors['чорний'].options) || [];
+        for (const [color, payload] of Object.entries(colors)) {
+          if (payload.alias_to) {
+            out.push({ ...base, color, recordType: 'alias', value: '', price: '', note: `alias -> ${payload.alias_to}` });
+            continue;
+          }
+          if (payload.offset_from_black !== undefined) {
+            if (blackOptions.length) {
+              for (const opt of blackOptions) {
+                out.push({
+                  ...base,
+                  color,
+                  recordType: 'option(calc)',
+                  value: opt.value ?? '',
+                  price: (Number(opt.price) || 0) + Number(payload.offset_from_black || 0),
+                  note: `від чорного: ${payload.offset_from_black >= 0 ? '+' : ''}${payload.offset_from_black}`
+                });
+              }
+            } else {
+              out.push({ ...base, color, recordType: 'offset', value: '', price: payload.offset_from_black, note: 'відхилення від чорного' });
+            }
+            continue;
+          }
+          const options = payload.options || [];
+          for (const opt of options) {
+            out.push({
+              ...base,
+              color,
+              recordType: 'option',
+              value: opt.value ?? '',
+              price: opt.price ?? '',
+              note: opt.note ?? ''
+            });
+          }
+        }
+      }
+      return out;
+    }
+
     async function load() {
       const meta = document.getElementById('meta');
       const rules = document.getElementById('rules');
       const fam = document.getElementById('families');
       const templates = document.getElementById('templates');
+      const rowsEl = document.getElementById('rows');
       const err = document.getElementById('err');
       try {
-        const res = await fetch('./single_base.json');
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const [singleRes, catalogRes] = await Promise.all([
+          fetch('./single_base.json'),
+          fetch('./components_catalog.json')
+        ]);
+        if (!singleRes.ok) throw new Error(`single_base.json HTTP ${singleRes.status}`);
+        if (!catalogRes.ok) throw new Error(`components_catalog.json HTTP ${catalogRes.status}`);
+        const data = await singleRes.json();
+        const catalogData = await catalogRes.json();
 
         meta.innerHTML = Object.entries(data.meta || {})
           .map(([k,v]) => `<div><strong>${k}</strong>: ${String(v)}</div>`).join('');
@@ -95,6 +170,20 @@
         `).join('');
 
         templates.innerHTML = (data.default_templates || []).map(t => `<span class="chip">${t}</span>`).join('');
+
+        const flat = flattenCatalog(catalogData.catalog_single || []);
+        rowsEl.innerHTML = flat.map(r => `
+          <tr>
+            <td>${r.category}</td>
+            <td>${r.component}</td>
+            <td>${r.color}</td>
+            <td>${r.param}</td>
+            <td>${r.value}</td>
+            <td>${r.recordType}</td>
+            <td>${r.price}</td>
+            <td>${r.note || ''}</td>
+          </tr>
+        `).join('');
       } catch (e) {
         err.textContent = `Не вдалося завантажити JSON. Якщо відкрито через file://, запусти локальний сервер. Деталі: ${e.message}`;
       }
