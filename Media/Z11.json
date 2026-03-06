@@ -1,0 +1,92 @@
+{
+  "source_image": "Z11.jpg",
+  "order_meta": {
+    "order_no": "49",
+    "date": "2026-02-06",
+    "size": "140x240",
+    "price_text": "3400€",
+    "advance_text": "100€",
+    "deadline_text": "Великодні",
+    "raw_color_hint": "чорна + дідкович"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "чорний",
+      "param": "ширина",
+      "value": "",
+      "source_text": "рамка - чорна + ступенька",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "дідковичі",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "чорний",
+      "param": "тип",
+      "value": "",
+      "source_text": "бордюра нижня/верхня - чорна внутрішній",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "5см",
+      "source_text": "боковина - дідкович 5см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Накривна",
+      "component": "Накривна складна",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "",
+      "source_text": "накривна - дідкович + полоса чорна",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - чорна",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "пряма",
+      "source_text": "плита - чорна пряма 115x60",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "латунь",
+      "param": "тип",
+      "value": "латунь",
+      "source_text": "хрест - дідкович + латунь",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "портрет - фото-смл втоплене",
+      "note": "Сервісна опція, не компонент базового каталогу."
+    }
+  ]
+}

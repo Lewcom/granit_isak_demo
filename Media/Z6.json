@@ -1,0 +1,110 @@
+{
+  "source_image": "Z6.jpg",
+  "order_meta": {
+    "order_no": "46",
+    "date": "2025-08-03",
+    "size": "120x220",
+    "price_text": "1950€",
+    "advance_text": "1000 грн",
+    "deadline_text": "травень",
+    "raw_color_hint": "чорна + дідкович"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "чорний",
+      "param": "ширина",
+      "value": "",
+      "source_text": "рамка - чорна",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "дідковичі",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Каблук",
+      "component": "Каблук",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "3см",
+      "source_text": "каблук - чорний 3см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "",
+      "param": "форма",
+      "value": "",
+      "source_text": "угли - душ як у Анісії",
+      "match_confidence": "low"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковини - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "чорний",
+      "param": "тип",
+      "value": "5см видовжені",
+      "source_text": "бордюри - чорні видовжені",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "кувшин",
+      "source_text": "стелла - кувшин",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Стелла",
+      "component": "Приставка до стелли",
+      "color": "чорний",
+      "param": "тип",
+      "value": "",
+      "source_text": "стелла + приставка",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - чорна",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - дідкович",
+      "match_confidence": "high"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "гравіювання/зад, фото-смл/овал",
+      "note": "Сервісна опція, не компонент каталогу."
+    }
+  ]
+}

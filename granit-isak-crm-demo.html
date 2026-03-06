@@ -1799,6 +1799,7 @@ const RAMKA_COLOR_OFFSETS = {
   'дідковичі': 35,
   'токівський': 20,
   'межирічка': 20,
+  'вісконт': 20,
   'зелений': 10,
   'лезнік': 55,
 };
@@ -1819,6 +1820,68 @@ if (PT['Рамка']?.['Рамка']) {
   mapped['—'] = mapped['чорний'].map(x => ({ ...x }));
   PT['Рамка']['Рамка'] = mapped;
 }
+
+function cloneColorIntoCatalog(pt, newColor, sourcePriority) {
+  Object.values(pt || {}).forEach(comps => {
+    Object.values(comps || {}).forEach(colors => {
+      if (!colors || typeof colors !== 'object') return;
+      if (colors[newColor]) return;
+      const src = (sourcePriority || []).find(c => Array.isArray(colors[c]) && colors[c].length)
+        || Object.keys(colors).find(c => Array.isArray(colors[c]) && colors[c].length);
+      if (!src) return;
+      colors[newColor] = colors[src].map(x => ({ ...x }));
+    });
+  });
+}
+
+function buildColorMatrix(baseOptions, offsets) {
+  const out = {};
+  Object.entries(offsets).forEach(([clr, off]) => {
+    out[clr] = baseOptions.map(x => ({ ...x, price: (Number(x.price) || 0) + off }));
+  });
+  out['—'] = out['чорний'].map(x => ({ ...x }));
+  return out;
+}
+
+function ensureDecorComponents(pt, kind) {
+  const single = kind === 'single';
+  const offsets = {
+    'чорний': 0,
+    'сірий': -5,
+    'дідковичі': 35,
+    'токівський': 20,
+    'межирічка': 20,
+    'вісконт': 20,
+    'зелений': 10,
+    'лезнік': 55
+  };
+  const base = {
+    'Стовпчики': [
+      { param: 'висота', value: '28см', price: single ? 80 : 120, note: '' },
+      { param: 'висота', value: '40см', price: single ? 110 : 160, note: '' }
+    ],
+    'Колони': [
+      { param: 'розмір', value: '15x15', price: single ? 140 : 200, note: '' }
+    ],
+    'Шари (куля)': [
+      { param: 'діаметр', value: '10см', price: single ? 35 : 50, note: '' },
+      { param: 'діаметр', value: '15см', price: single ? 55 : 80, note: '' }
+    ],
+    'Квітник': [
+      { param: 'розмір', value: '180x90', price: single ? 260 : 360, note: '' }
+    ]
+  };
+  if (!pt['Декор']) pt['Декор'] = {};
+  Object.entries(base).forEach(([comp, opts]) => {
+    if (pt['Декор'][comp]) return;
+    pt['Декор'][comp] = buildColorMatrix(opts, offsets);
+  });
+}
+
+cloneColorIntoCatalog(PT, 'вісконт', ['межирічка', 'токівський', 'чорний']);
+cloneColorIntoCatalog(PT_DOUBLE_RAW, 'вісконт', ['межирічка', 'токівський', 'чорний']);
+ensureDecorComponents(PT, 'single');
+ensureDecorComponents(PT_DOUBLE_RAW, 'double');
 rebuildPTTyped();
 
 function mkSel(opts, sel) {

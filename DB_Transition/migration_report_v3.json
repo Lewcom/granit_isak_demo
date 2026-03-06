@@ -1,0 +1,11 @@
+{
+  "records_after": 433,
+  "pricing_type_distribution": {
+    "double": 159,
+    "single": 274
+  },
+  "moved_variant_rows_to_pricing_type": 318,
+  "rows_with_non_variant_param3_kept": 0,
+  "params_dictionary_contains_variant": false,
+  "formula_unchanged": "final_price = price + option_value"
+}

@@ -1,0 +1,110 @@
+{
+  "source_image": "Z7.jpg",
+  "order_meta": {
+    "order_no": "12a + 12",
+    "date": "2025-11-04",
+    "size": "120x220 (2 шт)",
+    "price_text": "1670€ + 1670€",
+    "advance_text": "100$ + 100€",
+    "deadline_text": "кінець березня",
+    "raw_color_hint": "чорна + дідкович"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "чорний",
+      "param": "ширина",
+      "value": "",
+      "source_text": "заливка - рамка чорна",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "дідковичі",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Каблук",
+      "component": "Каблук",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "3см",
+      "source_text": "каблук - чорний 3см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковина - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "",
+      "param": "форма",
+      "value": "фігурні",
+      "source_text": "угли - фігурні",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "чорний",
+      "param": "тип",
+      "value": "5см видовжені",
+      "source_text": "бордюри - чорні видовжені",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Хвильки",
+      "component": "Хвильки 4шт",
+      "color": "дідковичі",
+      "param": "розмір",
+      "value": "3см",
+      "source_text": "хвильки - дідкович 3см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "10см",
+      "source_text": "підставка - чорна 10см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "кувшин",
+      "source_text": "стелла - кувшин",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "",
+      "param": "тип",
+      "value": "",
+      "source_text": "хрест - окремо",
+      "match_confidence": "low"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "ікона Ісус №2, епітафія",
+      "note": "Сервісні/контентні елементи поза базовим каталогом."
+    }
+  ]
+}

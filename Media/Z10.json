@@ -1,0 +1,101 @@
+{
+  "source_image": "Z10.jpg",
+  "order_meta": {
+    "order_no": "34",
+    "date": "2025-12-22",
+    "size": "120x220",
+    "price_text": "1100€",
+    "advance_text": "1000 грн",
+    "deadline_text": "до Великодня",
+    "raw_color_hint": "сірий / чорний"
+  },
+  "mapped_components": [
+    {
+      "category": "Фундамент",
+      "component": "Фундамент в досках",
+      "color": "—",
+      "param": "розмір",
+      "value": "120×220",
+      "source_text": "заливка - доски",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "сірий",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - сіра",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковина - чорні",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "сірий",
+      "param": "форма",
+      "value": "",
+      "source_text": "угли - сірі",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "сірий",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - сіра",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "сірий",
+      "param": "тип",
+      "value": "",
+      "source_text": "бордюри - сірі",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Хвильки",
+      "component": "Хвильки 4шт",
+      "color": "чорний",
+      "param": "розмір",
+      "value": "3см",
+      "source_text": "хвильки - чорні 3см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "чорний",
+      "param": "тип",
+      "value": "",
+      "source_text": "хрести - правий окремо чорний",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 90-100см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "пряма",
+      "source_text": "плита - пряма з хвилькою",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "ікона, вірші підібрати",
+      "note": "Сервісні/контентні елементи поза базовим каталогом."
+    }
+  ]
+}

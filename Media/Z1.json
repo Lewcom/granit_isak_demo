@@ -1,0 +1,109 @@
+{
+  "source_image": "Z1.jpg",
+  "order_meta": {
+    "order_no": "6",
+    "date": "2025-10-01",
+    "size": "200x260",
+    "price_text": "10500€",
+    "advance_text": "5000 грн",
+    "deadline_text": "березень 20",
+    "raw_color_hint": "зелений / вісконт"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "зелений",
+      "param": "ширина",
+      "value": "25-30см",
+      "source_text": "заливка-рамка зелена 25-30см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "вісконт",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - вісконт",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Каблук",
+      "component": "Каблук",
+      "color": "зелений",
+      "param": "товщина",
+      "value": "",
+      "source_text": "каблук - зелений",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "вісконт",
+      "param": "форма",
+      "value": "прямі",
+      "source_text": "угли - прямі вісконт з лодочкою",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "зелений",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковини - зелена",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Накривна",
+      "component": "Накривна звичайна",
+      "color": "зелений",
+      "param": "товщина",
+      "value": "",
+      "source_text": "накривна - зелена з вирізом",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Накривна",
+      "component": "Накривна складна",
+      "color": "вісконт",
+      "param": "товщина",
+      "value": "",
+      "source_text": "накривна 2 - вісконт по формі",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "зелений",
+      "param": "товщина",
+      "value": "10см",
+      "source_text": "підставка - зелена 10см",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "вісконт",
+      "param": "товщина",
+      "value": "4см",
+      "source_text": "підставка 2 - вісконт 4см",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "стовпчики висота 40см",
+      "note": "Немає відповідного компонента у поточному каталозі."
+    },
+    {
+      "source_text": "колони 15x15см",
+      "note": "Поза поточним каталогом компонентів."
+    },
+    {
+      "source_text": "фото - емо",
+      "note": "Сервісна опція, не компонент каталогу."
+    }
+  ]
+}

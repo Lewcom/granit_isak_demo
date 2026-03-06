@@ -1,0 +1,9 @@
+{
+  "records_total": 433,
+  "components_distinct": 19,
+  "dedup_removed": 0,
+  "inferred_prices_count": 0,
+  "conflict_keys_single_double": 159,
+  "options_rows_count": 38,
+  "base_rows_count": 395
+}

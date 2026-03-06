@@ -1,0 +1,213 @@
+{
+  "params": [
+    {
+      "param_name": "висота",
+      "components": [
+        {
+          "component_code": "CMP014_456835",
+          "component": "Стовпчики",
+          "allowed_values": [
+            "28см",
+            "40см"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "діаметр",
+      "components": [
+        {
+          "component_code": "CMP019_DB09AD",
+          "component": "Шари (куля)",
+          "allowed_values": [
+            "10см",
+            "15см"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "діапазон",
+      "components": [
+        {
+          "component_code": "CMP017_7B8DD0",
+          "component": "Хвильки 4шт",
+          "allowed_values": [
+            "30-35",
+            "40-45"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "розмір",
+      "components": [
+        {
+          "component_code": "CMP004_AC7A86",
+          "component": "Квітник",
+          "allowed_values": [
+            "180x90"
+          ]
+        },
+        {
+          "component_code": "CMP005_A37C34",
+          "component": "Колони",
+          "allowed_values": [
+            "15x15"
+          ]
+        },
+        {
+          "component_code": "CMP016_ECE7B2",
+          "component": "Фундамент в досках",
+          "allowed_values": [
+            "120×220",
+            "220×220"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "тип",
+      "components": [
+        {
+          "component_code": "CMP009_42A83A",
+          "component": "Приставка до стелли",
+          "allowed_values": [
+            "проста",
+            "складна"
+          ]
+        },
+        {
+          "component_code": "CMP018_52FF12",
+          "component": "Хрест",
+          "allowed_values": [
+            "католицький",
+            "латунь",
+            "православний"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "товщина",
+      "components": [
+        {
+          "component_code": "CMP002_48560B",
+          "component": "Боковина",
+          "allowed_values": [
+            "3см",
+            "5см"
+          ]
+        },
+        {
+          "component_code": "CMP003_C519BD",
+          "component": "Каблук",
+          "allowed_values": [
+            "3см",
+            "5см",
+            "фігурний"
+          ]
+        },
+        {
+          "component_code": "CMP006_BD7428",
+          "component": "Накривна звичайна",
+          "allowed_values": [
+            "3см",
+            "5см"
+          ]
+        },
+        {
+          "component_code": "CMP007_533D0D",
+          "component": "Накривна складна",
+          "allowed_values": [
+            "3см",
+            "5см"
+          ]
+        },
+        {
+          "component_code": "CMP010_395974",
+          "component": "Підставка",
+          "allowed_values": [
+            "10см",
+            "13см",
+            "3см",
+            "5см"
+          ]
+        },
+        {
+          "component_code": "CMP017_7B8DD0",
+          "component": "Хвильки 4шт",
+          "allowed_values": [
+            "3см",
+            "5см"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "форма",
+      "components": [
+        {
+          "component_code": "CMP001_39E6F0",
+          "component": "Бардюр верхній",
+          "allowed_values": [
+            "видовжені",
+            "прямі",
+            "фігурні"
+          ]
+        },
+        {
+          "component_code": "CMP012_0E58A0",
+          "component": "Стелла 105-120см",
+          "allowed_values": [
+            "кувшин",
+            "пряма",
+            "фігурна"
+          ]
+        },
+        {
+          "component_code": "CMP013_13A8BD",
+          "component": "Стелла 90-100см",
+          "allowed_values": [
+            "кувшин",
+            "пряма"
+          ]
+        },
+        {
+          "component_code": "CMP015_0687F6",
+          "component": "Угли 4шт",
+          "allowed_values": [
+            "квадратні",
+            "фігурні"
+          ]
+        }
+      ]
+    },
+    {
+      "param_name": "ширина",
+      "components": [
+        {
+          "component_code": "CMP001_39E6F0",
+          "component": "Бардюр верхній",
+          "allowed_values": [
+            "5см",
+            "7см"
+          ]
+        },
+        {
+          "component_code": "CMP011_AE1549",
+          "component": "Рамка",
+          "allowed_values": [
+            "20см",
+            "25см",
+            "30см",
+            "35см",
+            "40см",
+            "45см",
+            "50см"
+          ]
+        }
+      ]
+    }
+  ]
+}

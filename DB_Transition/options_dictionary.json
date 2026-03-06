@@ -1,0 +1,33 @@
+{
+  "options": [
+    {
+      "option_name": "перо",
+      "observed_option_values": [
+        10
+      ],
+      "value_type": "number"
+    },
+    {
+      "option_name": "плитка чорна на кольорову стеллу",
+      "observed_option_values": [
+        100
+      ],
+      "value_type": "number"
+    },
+    {
+      "option_name": "якщо є вирізи",
+      "observed_option_values": [
+        10
+      ],
+      "value_type": "number"
+    },
+    {
+      "option_name": "якщо є різьблення",
+      "observed_option_values": [
+        15
+      ],
+      "value_type": "number"
+    }
+  ],
+  "rule": "final_price = price + option_value"
+}

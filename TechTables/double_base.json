@@ -8,6 +8,7 @@
   },
   "normalization_notes": [
     "ток/межир = токівський + межирічка",
+    "висконт/вісконт = вісконт",
     "чор/сір = чорний + сірий",
     "дідкович = дідковичі",
     "ін.колір = інший колір"
@@ -51,6 +52,9 @@
           "offset_from_black": 20
         },
         "межирічка": {
+          "offset_from_black": 20
+        },
+        "вісконт": {
           "offset_from_black": 20
         },
         "зелений": {
@@ -149,6 +153,66 @@
         "межирічка": { "options": [{ "value": "3см", "price": 130 }, { "value": "5см", "price": 140 }, { "value": "10см", "price": 260 }, { "value": "13см", "price": 310 }] },
         "зелений": { "options": [{ "value": "3см", "price": 120 }, { "value": "5см", "price": 150 }, { "value": "10см", "price": 240 }, { "value": "13см", "price": 290 }] },
         "лезнік": { "options": [{ "value": "3см", "price": 200 }, { "value": "5см", "price": 220 }, { "value": "10см", "price": 340 }, { "value": "13см", "price": 380 }] }
+      }
+    },
+    {
+      "category": "Декор",
+      "component": "Стовпчики",
+      "param": "висота",
+      "colors": {
+        "чорний": { "options": [{ "value": "28см", "price": 120 }, { "value": "40см", "price": 160 }] },
+        "сірий": { "options": [{ "value": "28см", "price": 115 }, { "value": "40см", "price": 155 }] },
+        "дідковичі": { "options": [{ "value": "28см", "price": 155 }, { "value": "40см", "price": 195 }] },
+        "токівський": { "options": [{ "value": "28см", "price": 140 }, { "value": "40см", "price": 180 }] },
+        "межирічка": { "options": [{ "value": "28см", "price": 140 }, { "value": "40см", "price": 180 }] },
+        "вісконт": { "options": [{ "value": "28см", "price": 140 }, { "value": "40см", "price": 180 }] },
+        "зелений": { "options": [{ "value": "28см", "price": 130 }, { "value": "40см", "price": 170 }] },
+        "лезнік": { "options": [{ "value": "28см", "price": 175 }, { "value": "40см", "price": 215 }] }
+      }
+    },
+    {
+      "category": "Декор",
+      "component": "Колони",
+      "param": "розмір",
+      "colors": {
+        "чорний": { "options": [{ "value": "15x15", "price": 200 }] },
+        "сірий": { "options": [{ "value": "15x15", "price": 195 }] },
+        "дідковичі": { "options": [{ "value": "15x15", "price": 235 }] },
+        "токівський": { "options": [{ "value": "15x15", "price": 220 }] },
+        "межирічка": { "options": [{ "value": "15x15", "price": 220 }] },
+        "вісконт": { "options": [{ "value": "15x15", "price": 220 }] },
+        "зелений": { "options": [{ "value": "15x15", "price": 210 }] },
+        "лезнік": { "options": [{ "value": "15x15", "price": 255 }] }
+      }
+    },
+    {
+      "category": "Декор",
+      "component": "Шари (куля)",
+      "param": "діаметр",
+      "colors": {
+        "чорний": { "options": [{ "value": "10см", "price": 50 }, { "value": "15см", "price": 80 }] },
+        "сірий": { "options": [{ "value": "10см", "price": 45 }, { "value": "15см", "price": 75 }] },
+        "дідковичі": { "options": [{ "value": "10см", "price": 85 }, { "value": "15см", "price": 115 }] },
+        "токівський": { "options": [{ "value": "10см", "price": 70 }, { "value": "15см", "price": 100 }] },
+        "межирічка": { "options": [{ "value": "10см", "price": 70 }, { "value": "15см", "price": 100 }] },
+        "вісконт": { "options": [{ "value": "10см", "price": 70 }, { "value": "15см", "price": 100 }] },
+        "зелений": { "options": [{ "value": "10см", "price": 60 }, { "value": "15см", "price": 90 }] },
+        "лезнік": { "options": [{ "value": "10см", "price": 105 }, { "value": "15см", "price": 135 }] }
+      }
+    },
+    {
+      "category": "Декор",
+      "component": "Квітник",
+      "param": "розмір",
+      "colors": {
+        "чорний": { "options": [{ "value": "180x90", "price": 360 }] },
+        "сірий": { "options": [{ "value": "180x90", "price": 355 }] },
+        "дідковичі": { "options": [{ "value": "180x90", "price": 395 }] },
+        "токівський": { "options": [{ "value": "180x90", "price": 380 }] },
+        "межирічка": { "options": [{ "value": "180x90", "price": 380 }] },
+        "вісконт": { "options": [{ "value": "180x90", "price": 380 }] },
+        "зелений": { "options": [{ "value": "180x90", "price": 370 }] },
+        "лезнік": { "options": [{ "value": "180x90", "price": 415 }] }
       }
     }
   ]

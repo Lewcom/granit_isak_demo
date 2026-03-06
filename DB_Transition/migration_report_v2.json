@@ -1,0 +1,12 @@
+{
+  "records_before": 433,
+  "records_after": 433,
+  "rows_delta": 0,
+  "duplicates_before": 0,
+  "duplicates_after": 0,
+  "transformed_bardyur_rows": 42,
+  "transformed_hvylky_rows": 25,
+  "legacy_bardyur_param1_tip_left": 0,
+  "legacy_hvylky_param1_rozmir_left": 0,
+  "formula_unchanged": "final_price = price + option_value"
+}

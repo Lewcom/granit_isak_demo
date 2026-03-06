@@ -1,0 +1,87 @@
+{
+  "source_image": "Z13.jpg",
+  "order_meta": {
+    "order_no": "",
+    "date": "2026-03-01",
+    "size": "220x220",
+    "price_text": "2300€",
+    "advance_text": "1000 грн",
+    "deadline_text": "травень",
+    "raw_color_hint": "межирічка"
+  },
+  "mapped_components": [
+    {
+      "category": "Фундамент",
+      "component": "Фундамент в досках",
+      "color": "—",
+      "param": "розмір",
+      "value": "220×220",
+      "source_text": "заливка - доски + демонтаж",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "межирічка",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - межирічка",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "",
+      "param": "форма",
+      "value": "прямі з лодочкою",
+      "source_text": "угли - прямі з лодочкою",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "межирічка",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковини - межирічка",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "",
+      "param": "тип",
+      "value": "квадратні видовб",
+      "source_text": "бордюри - квадратні видовб",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Накривна",
+      "component": "Накривна звичайна",
+      "color": "межирічка",
+      "param": "товщина",
+      "value": "",
+      "source_text": "накривні - межирічка",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "межирічка",
+      "param": "форма",
+      "value": "кувшин",
+      "source_text": "стелла - кувшин",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "демонтаж",
+      "note": "Сервісна/монтажна операція, не компонент каталогу."
+    },
+    {
+      "source_text": "кувшин като",
+      "note": "Потребує уточнення (ймовірно католицький елемент або другий тип стелли)."
+    }
+  ]
+}

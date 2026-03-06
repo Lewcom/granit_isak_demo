@@ -1,0 +1,92 @@
+{
+  "source_image": "Z4.jpg",
+  "order_meta": {
+    "order_no": "21",
+    "date": "2025-11-27",
+    "size": "120x220",
+    "price_text": "1140€",
+    "advance_text": "200€",
+    "deadline_text": "до Великодня",
+    "raw_color_hint": "сірий / чорний"
+  },
+  "mapped_components": [
+    {
+      "category": "Фундамент",
+      "component": "Фундамент в досках",
+      "color": "—",
+      "param": "розмір",
+      "value": "120×220",
+      "source_text": "заливка - доски",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "сірий",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - сіра",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "сірий",
+      "param": "форма",
+      "value": "",
+      "source_text": "угли - сірі",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковина - чорний",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "сірий",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - сіра",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "сірий",
+      "param": "тип",
+      "value": "",
+      "source_text": "бордюри - сірі",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 90-100см",
+      "color": "сірий",
+      "param": "форма",
+      "value": "пряма",
+      "source_text": "стелла - пряма з хвилькою",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "чорний",
+      "param": "тип",
+      "value": "",
+      "source_text": "хрест - окремо",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "ікона, вірші підібрати",
+      "note": "Контентні побажання, не компоненти каталогу."
+    }
+  ]
+}

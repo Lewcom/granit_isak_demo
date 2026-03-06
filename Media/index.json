@@ -1,0 +1,25 @@
+{
+  "generated_from": "Z1.jpg ... Z13.jpg",
+  "format_version": "1.0",
+  "description": "Normalized component mappings from Media order photos to current TechTables catalog.",
+  "files": [
+    { "source_image": "Z1.jpg", "json_file": "Z1.json", "mapped_count": 9, "unmapped_count": 3 },
+    { "source_image": "Z2.jpg", "json_file": "Z2.json", "mapped_count": 5, "unmapped_count": 6 },
+    { "source_image": "Z3.jpg", "json_file": "Z3.json", "mapped_count": 9, "unmapped_count": 1 },
+    { "source_image": "Z4.jpg", "json_file": "Z4.json", "mapped_count": 8, "unmapped_count": 1 },
+    { "source_image": "Z5.jpg", "json_file": "Z5.json", "mapped_count": 12, "unmapped_count": 1 },
+    { "source_image": "Z6.jpg", "json_file": "Z6.json", "mapped_count": 10, "unmapped_count": 1 },
+    { "source_image": "Z7.jpg", "json_file": "Z7.json", "mapped_count": 10, "unmapped_count": 1 },
+    { "source_image": "Z8.jpg", "json_file": "Z8.json", "mapped_count": 10, "unmapped_count": 2 },
+    { "source_image": "Z9.jpg", "json_file": "Z9.json", "mapped_count": 10, "unmapped_count": 1 },
+    { "source_image": "Z10.jpg", "json_file": "Z10.json", "mapped_count": 9, "unmapped_count": 1 },
+    { "source_image": "Z11.jpg", "json_file": "Z11.json", "mapped_count": 8, "unmapped_count": 1 },
+    { "source_image": "Z12.jpg", "json_file": "Z12.json", "mapped_count": 7, "unmapped_count": 3 },
+    { "source_image": "Z13.jpg", "json_file": "Z13.json", "mapped_count": 7, "unmapped_count": 2 }
+  ],
+  "totals": {
+    "orders": 13,
+    "mapped_components": 114,
+    "unmapped_items": 24
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "source_image": "Z8.jpg",
+  "order_meta": {
+    "order_no": "22",
+    "date": "2025-11-27",
+    "size": "120x220",
+    "price_text": "1650€",
+    "advance_text": "1000 грн",
+    "deadline_text": "після 6 травня",
+    "raw_color_hint": "межирічка + чорний"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "межирічка",
+      "param": "ширина",
+      "value": "30см",
+      "source_text": "рамка - межирічка (30см)",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "межирічка",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - межирічка",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Каблук",
+      "component": "Каблук",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "каблук - чорний",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "межирічка",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковина - межирічка",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Угли",
+      "component": "Угли 4шт",
+      "color": "",
+      "param": "форма",
+      "value": "фігурні",
+      "source_text": "угли - фігурні",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Бардюри",
+      "component": "Бардюр верхній",
+      "color": "",
+      "param": "тип",
+      "value": "5см видовжені",
+      "source_text": "бордюри - видовблені/видовжені",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хвильки",
+      "component": "Хвильки 4шт",
+      "color": "",
+      "param": "розмір",
+      "value": "",
+      "source_text": "хвильки - без вирізання",
+      "match_confidence": "low"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - 1 чорна",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "кувшин",
+      "source_text": "стелла - кувшин",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "",
+      "param": "тип",
+      "value": "",
+      "source_text": "хрести - окремо",
+      "match_confidence": "low"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "букви золоті",
+      "note": "Декоративна/сервісна опція."
+    },
+    {
+      "source_text": "ваза + лампадка чорні",
+      "note": "Поза поточним базовим каталогом компонентів."
+    }
+  ]
+}

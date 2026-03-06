@@ -1,0 +1,91 @@
+{
+  "source_image": "Z12.jpg",
+  "order_meta": {
+    "order_no": "60",
+    "date": "2026-02-12",
+    "size": "140x240",
+    "price_text": "3400",
+    "advance_text": "1000 грн",
+    "deadline_text": "5 липня (після)",
+    "raw_color_hint": "чорна + дідкович"
+  },
+  "mapped_components": [
+    {
+      "category": "Рамка",
+      "component": "Рамка",
+      "color": "чорний",
+      "param": "ширина",
+      "value": "",
+      "source_text": "рамка - чорна",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Плитка",
+      "component": "Плитка",
+      "color": "дідковичі",
+      "param": "—",
+      "value": "—",
+      "source_text": "плитка - дідкович",
+      "match_confidence": "high"
+    },
+    {
+      "category": "Боковина",
+      "component": "Боковина",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "боковина - чорна + полоси дідкович",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Підставка",
+      "component": "Підставка",
+      "color": "чорний",
+      "param": "товщина",
+      "value": "",
+      "source_text": "підставка - чорна + надпис + дідкович",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Накривна",
+      "component": "Накривна складна",
+      "color": "дідковичі",
+      "param": "товщина",
+      "value": "",
+      "source_text": "накривна - чорна + дідкович",
+      "match_confidence": "medium"
+    },
+    {
+      "category": "Хрест",
+      "component": "Хрест",
+      "color": "інший колір",
+      "param": "тип",
+      "value": "",
+      "source_text": "хрести - окремо дідкович",
+      "match_confidence": "low"
+    },
+    {
+      "category": "Стелла",
+      "component": "Стелла 105-120см",
+      "color": "чорний",
+      "param": "форма",
+      "value": "кувшин",
+      "source_text": "плита - кувшин",
+      "match_confidence": "medium"
+    }
+  ],
+  "unmapped_items": [
+    {
+      "source_text": "фото-смл",
+      "note": "Сервісна опція, не компонент базового каталогу."
+    },
+    {
+      "source_text": "світлий дідкович",
+      "note": "Уточнення відтінку, немає окремого кольору в поточному каталозі."
+    },
+    {
+      "source_text": "гравіювання чорно-біле, втопити в плиту",
+      "note": "Технологічна/сервісна примітка."
+    }
+  ]
+}
